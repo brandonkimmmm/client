@@ -1,25 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Route, Link } from 'react-router-dom';
 import './App.css';
+import Landing from './components/Landing';
 
 class App extends Component {
+  state = {
+    response: '',
+  }
+
+  componentDidMount() {
+    this.callApi()
+    .then(res => this.setState({ response: res.express }))
+    .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('/api/hello');
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+        <header>
+          <nav>
+            <Link to='/'>Landing</Link>
+          </nav>
+          <h1>Grocery List</h1>
+          <p>{this.state.response}</p>
         </header>
+        <main>
+          <Route exact path='/' component={Landing} />
+        </main>
       </div>
     );
   }
