@@ -35,7 +35,7 @@ function ButtonAppBar(props) {
                         Gorcery List
                     </Typography>
                         <Button component={ Link } to="/user/signin" color="inherit">
-                            Login
+                            Sign in
                         </Button>
                         <Button component={ Link } to="/" color="inherit">
                             Home
