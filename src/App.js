@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import './App.css';
 import Landing from './components/Landing';
+import Signup from './components/Signup';
 import ButtonAppBar from './components/Navbar';
 
 class App extends Component {
@@ -33,6 +34,7 @@ class App extends Component {
         </header>
         <main>
           <Route exact path='/' component={Landing} />
+          <Route path='/user/signup' component={Signup} />
         </main>
       </div>
     );
