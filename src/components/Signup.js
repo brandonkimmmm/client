@@ -9,7 +9,7 @@ class Signup extends Component {
             email: '',
             username: '',
             password: '',
-            passwordConf: '',
+            passwordConfirmation: '',
             signUpResponse: ''
         };
     }
@@ -35,7 +35,7 @@ class Signup extends Component {
                 email: this.state.email,
                 username: this.state.username,
                 password: this.state.password,
-                passwordConf: this.state.passwordConf
+                passwordConfirmation: this.state.passwordConfirmation
             })
         })
         const body = await response.text();
@@ -43,7 +43,7 @@ class Signup extends Component {
             email: '',
             username: '',
             password: '',
-            passwordConf: '',
+            passwordConfirmation: '',
             signUpResponse: body
         });
 
@@ -63,7 +63,7 @@ class Signup extends Component {
     }
 
     handlePassConfChange(event) {
-        this.setState({ passwordConf: event.target.value });
+        this.setState({ passwordConfirmation: event.target.value });
     }
 
     render() {
@@ -92,11 +92,11 @@ class Signup extends Component {
                     value={this.state.password}
                     onChange={ (e) => this.handlePasswordChange(e) }>
                 </input>
-                <label htmlFor="passwordConf">Password Confirmation</label>
-                <input className="passwordConf signupInput"
+                <label htmlFor="passwordConfirmation">Password Confirmation</label>
+                <input className="passwordConfirmation signupInput"
                     type="password"
                     placeholder="Re-enter your password"
-                    value={this.state.passwordConf}
+                    value={this.state.passwordConfirmation}
                     onChange={ (e) => this.handlePassConfChange(e) }>
                 </input>
                 <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
