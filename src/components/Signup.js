@@ -9,18 +9,45 @@ class Signup extends Component {
             email: '',
             username: '',
             password: '',
-            passwordConf: ''
+            passwordConf: '',
+            signUpResponse: ''
         };
     }
 
-    signupSubmit(e, email, username, password) {
+    // signupSubmit(e) {
+    //     e.preventDefault();
+    //     this.setState({
+    //         email: '',
+    //         username: '',
+    //         password: '',
+    //         passwordConf: ''
+    //     });
+    // }
+
+    handleSubmit = async e => {
         e.preventDefault();
+        const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                username: this.state.username,
+                password: this.state.password,
+                passwordConf: this.state.passwordConf
+            })
+        })
+        const body = await response.text();
         this.setState({
             email: '',
             username: '',
             password: '',
-            passwordConf: ''
+            passwordConf: '',
+            signUpResponse: body
         });
+
+        console.log(body);
     }
 
     handleEmailChange(event) {
@@ -43,7 +70,7 @@ class Signup extends Component {
         return (
         <section className="signup">
             <h1>Sign Up</h1>
-            <form className="signupForm" onSubmit={ (e, email, username, password) => this.signupSubmit(e, this.state.email, this.state.username, this.state.password) }>
+            <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
                 <label htmlFor="email">Email</label>
                 <input className="email signupInput"
                     type="email"
@@ -72,8 +99,9 @@ class Signup extends Component {
                     value={this.state.passwordConf}
                     onChange={ (e) => this.handlePassConfChange(e) }>
                 </input>
-                <input className="signupSubmit signupInput" type="submit" value="Submit"></input>
+                <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
             </form>
+            <p>{this.state.signUpResponse}</p>
         </section>
         )
     }
