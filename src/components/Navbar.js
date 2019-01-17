@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,45 +9,100 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
-const styles = {
-    root: {
-        flexGrow: 1,
-    },
-    grow: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginLeft: -12,
-        marginRight: 20,
-    },
-};
+class ButtonAppBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
 
-function ButtonAppBar(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" color="inherit" className={classes.grow}>
-                        Gorcery List
-                    </Typography>
+        }
+    }
+
+    handleSubmit = async e => {
+        e.preventDefault();
+        const response = await fetch('/api/users/signout');
+        const body = await response.text();
+        console.log(body);
+    }
+
+    isLogged() {
+        if(!this.props.user) {
+            return (
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton color="inherit" aria-label="Menu">
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" color="inherit">
+                            Gorcery List
+                        </Typography>
                         <Button component={ Link } to="/user/signin" color="inherit">
                             Sign in
                         </Button>
                         <Button component={ Link } to="/" color="inherit">
                             Home
                         </Button>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+                    </Toolbar>
+                </AppBar>
+
+            )
+        } else {
+            return (
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton color="inherit" aria-label="Menu">
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" color="inherit">
+                            Gorcery List
+                        </Typography>
+                        <Button color="inherit">
+                            {this.props.user.username}
+                        </Button>
+                        <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
+                            <Button type="submit" color="inherit">
+                                Sign out
+                            </Button>
+                        </form>
+                        <Button component={ Link } to="/" color="inherit">
+                            Home
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                {this.isLogged()}
+            </div>
+        );
+    }
 }
 
-ButtonAppBar.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
+// function ButtonAppBar(props) {
+//     const { classes } = props;
+//     return (
+//         <div className={classes.root}>
+//             <AppBar position="static">
+//                 <Toolbar>
+//                     <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+//                         <MenuIcon />
+//                     </IconButton>
+//                     <Typography variant="h6" color="inherit" className={classes.grow}>
+//                         Gorcery List
+//                     </Typography>
+//                         <Button component={ Link } to="/user/signin" color="inherit">
+//                             Sign in
+//                         </Button>
+//                         <Button component={ Link } to="/" color="inherit">
+//                             Home
+//                         </Button>
+//                 </Toolbar>
+//             </AppBar>
+//         </div>
+//     );
+// }
 
-export default withStyles(styles)(ButtonAppBar);
+export default ButtonAppBar;

@@ -7,30 +7,40 @@ import Signin from './components/Signin';
 import ButtonAppBar from './components/Navbar';
 
 class App extends Component {
-  // state = {
-  //   response: '',
-  // }
+  state = {
+    user: null
+  }
 
-  // componentDidMount() {
-  //   this.callApi()
-  //   .then(res => this.setState({ response: res.express }))
-  //   .catch(err => console.log(err));
-  // }
+  componentDidMount() {
+    this.callApi()
+    .then(res => {
+      if(!res) {
+        this.setState({ user: null })
+      } else {
+        this.setState({ user: res })
+      }
+    })
+    .catch(err => console.log(err));
+  }
 
-  // callApi = async () => {
-  //   const response = await fetch('/api/hello');
-  //   const body = await response.json();
+  callApi = async () => {
+    const response = await fetch('/api/users/isAuthenticated');
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
 
-  //   if (response.status !== 200) throw Error(body.message);
-
-  //   return body;
-  // }
+  setUser(user) {
+    this.setState({ user: user });
+  }
 
   render() {
     return (
       <div className="App">
         <header>
-          <ButtonAppBar />
+          <ButtonAppBar
+            user={this.state.user}
+          />
           {/* <p>{this.state.response}</p> */}
         </header>
         <main>
