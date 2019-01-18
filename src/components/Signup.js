@@ -47,7 +47,6 @@ class Signup extends Component {
             signUpResponse: body.message
         });
         this.props.setUser(body.user);
-        console.log(body);
     }
 
     handleEmailChange(event) {

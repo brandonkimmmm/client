@@ -25,7 +25,7 @@ class ButtonAppBar extends Component {
     }
 
     isLogged() {
-        if(!this.props.user) {
+        if(this.props.user === undefined) {
             return (
                 <AppBar position="static">
                     <Toolbar>

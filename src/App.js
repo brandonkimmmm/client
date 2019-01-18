@@ -14,11 +14,7 @@ class App extends Component {
   componentDidMount() {
     this.callApi()
     .then(res => {
-      if(!res) {
-        this.setState({ user: undefined })
-      } else {
-        this.setState({ user: res })
-      }
+      this.setState({ user: res });
     })
     .catch(err => console.log(err));
   }
@@ -27,7 +23,7 @@ class App extends Component {
     const response = await fetch('/api/users/isAuthenticated');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
-    return body;
+    return body.user;
   }
 
   setUser(user) {
@@ -49,7 +45,10 @@ class App extends Component {
             path='/user/signup'
             render={(props) => <Signup user={this.state.user} setUser={(user) => this.setUser(user)} />}
           />
-          <Route path='/user/signin' component={Signin} />
+          <Route
+            path='/user/signin'
+            render={(props) => <Signin user={this.state.user} setUser={(user) => this.setUser(user)} />}
+          />
         </main>
       </div>
     );

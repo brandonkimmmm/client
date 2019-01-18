@@ -115,17 +115,17 @@ class Signin extends Component {
             },
             body: JSON.stringify({
                 email: this.state.email,
-                password: this.state.password,
+                password: this.state.password
             })
         })
-        const body = await response.text();
+        const body = await response.json();
+        if (response.status !== 200) throw Error(body.message);
         this.setState({
             email: '',
             password: '',
-            signinResponse: body
+            signinResponse: body.message || 'Error: Wrong Credentials'
         });
-
-        console.log('this is the body', body);
+        this.props.setUser(body.user || undefined);
     }
 
     handleEmailChange(event) {
@@ -139,7 +139,7 @@ class Signin extends Component {
     render() {
         return (
         <section className="signup">
-            <h1>Sign Up</h1>
+            <h1>Sign In</h1>
             <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
                 <label htmlFor="email">Email</label>
                 <input className="email signupInput"
