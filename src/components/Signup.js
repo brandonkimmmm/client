@@ -38,15 +38,15 @@ class Signup extends Component {
                 passwordConfirmation: this.state.passwordConfirmation
             })
         })
-        const body = await response.text();
+        const body = await response.json();
         this.setState({
             email: '',
             username: '',
             password: '',
             passwordConfirmation: '',
-            signUpResponse: body
+            signUpResponse: body.message
         });
-
+        this.props.setUser(body.user);
         console.log(body);
     }
 

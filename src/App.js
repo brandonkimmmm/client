@@ -8,14 +8,14 @@ import ButtonAppBar from './components/Navbar';
 
 class App extends Component {
   state = {
-    user: null
+    user: undefined
   }
 
   componentDidMount() {
     this.callApi()
     .then(res => {
       if(!res) {
-        this.setState({ user: null })
+        this.setState({ user: undefined })
       } else {
         this.setState({ user: res })
       }
@@ -45,7 +45,10 @@ class App extends Component {
         </header>
         <main>
           <Route exact path='/' component={Landing} />
-          <Route path='/user/signup' component={Signup} />
+          <Route
+            path='/user/signup'
+            render={(props) => <Signup user={this.state.user} setUser={(user) => this.setUser(user)} />}
+          />
           <Route path='/user/signin' component={Signin} />
         </main>
       </div>
