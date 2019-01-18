@@ -5,6 +5,7 @@ import Landing from './components/Landing';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import ButtonAppBar from './components/Navbar';
+import { withAlert } from 'react-alert';
 
 class App extends Component {
   state = {
@@ -30,12 +31,17 @@ class App extends Component {
     this.setState({ user: user });
   }
 
+  alert(message) {
+    this.props.alert.show(message);
+  }
+
   render() {
     return (
       <div className="App">
         <header>
           <ButtonAppBar
             user={this.state.user}
+            setUser={(user) => this.setUser(user)}
           />
           {/* <p>{this.state.response}</p> */}
         </header>
@@ -43,7 +49,7 @@ class App extends Component {
           <Route exact path='/' component={Landing} />
           <Route
             path='/user/signup'
-            render={(props) => <Signup user={this.state.user} setUser={(user) => this.setUser(user)} />}
+            render={(props) => <Signup user={this.state.user} setUser={(user) => this.setUser(user)} alert={(message) => this.alert(message)}/>}
           />
           <Route
             path='/user/signin'
@@ -55,4 +61,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withAlert(App);

@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { withAlert } from 'react-alert';
 
 class ButtonAppBar extends Component {
     constructor(props) {
@@ -21,7 +22,8 @@ class ButtonAppBar extends Component {
         e.preventDefault();
         const response = await fetch('/api/users/signout');
         const body = await response.text();
-        console.log(body);
+        this.props.alert.show(body);
+        this.props.setUser(undefined);
     }
 
     isLogged() {
@@ -105,4 +107,4 @@ class ButtonAppBar extends Component {
 //     );
 // }
 
-export default ButtonAppBar;
+export default withAlert(ButtonAppBar);

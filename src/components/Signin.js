@@ -93,8 +93,9 @@
 // export default withStyles(styles)(SignIn);
 
 import React, { Component } from 'react';
-// import {Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import './signup.css';
+import { withAlert } from 'react-alert';
 
 class Signin extends Component {
     constructor(props) {
@@ -102,8 +103,20 @@ class Signin extends Component {
         this.state = {
             email: '',
             password: '',
-            signinResponse: ''
+            redirect: false
         };
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect) {
+            return <Redirect to='/' />
+        }
     }
 
     handleSubmit = async e => {
@@ -122,10 +135,11 @@ class Signin extends Component {
         if (response.status !== 200) throw Error(body.message);
         this.setState({
             email: '',
-            password: '',
-            signinResponse: body.message || 'Error: Wrong Credentials'
+            password: ''
         });
-        this.props.setUser(body.user || undefined);
+        this.props.alert.show(body.message);
+        this.props.setUser(body.user);
+        if(body.user) { this.setRedirect() };
     }
 
     handleEmailChange(event) {
@@ -139,6 +153,7 @@ class Signin extends Component {
     render() {
         return (
         <section className="signup">
+            {this.renderRedirect()}
             <h1>Sign In</h1>
             <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
                 <label htmlFor="email">Email</label>
@@ -157,10 +172,9 @@ class Signin extends Component {
                 </input>
                 <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
             </form>
-            <p>{this.state.signinResponse}</p>
         </section>
         )
     }
 }
 
-export default Signin;
+export default withAlert(Signin);

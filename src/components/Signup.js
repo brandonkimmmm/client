@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-// import {Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import './signup.css';
+import { withAlert } from 'react-alert';
 
 class Signup extends Component {
     constructor(props) {
@@ -10,19 +11,21 @@ class Signup extends Component {
             username: '',
             password: '',
             passwordConfirmation: '',
-            signUpResponse: ''
+            redirect: false
         };
     }
 
-    // signupSubmit(e) {
-    //     e.preventDefault();
-    //     this.setState({
-    //         email: '',
-    //         username: '',
-    //         password: '',
-    //         passwordConf: ''
-    //     });
-    // }
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect) {
+            return <Redirect to='/' />
+        }
+    }
 
     handleSubmit = async e => {
         e.preventDefault();
@@ -44,9 +47,10 @@ class Signup extends Component {
             username: '',
             password: '',
             passwordConfirmation: '',
-            signUpResponse: body.message
         });
+        this.props.alert.show(body.message);
         this.props.setUser(body.user);
+        if(body.user) { this.setRedirect() };
     }
 
     handleEmailChange(event) {
@@ -68,6 +72,7 @@ class Signup extends Component {
     render() {
         return (
         <section className="signup">
+            {this.renderRedirect()}
             <h1>Sign Up</h1>
             <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
                 <label htmlFor="email">Email</label>
@@ -100,10 +105,9 @@ class Signup extends Component {
                 </input>
                 <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
             </form>
-            <p>{this.state.signUpResponse}</p>
         </section>
         )
     }
 }
 
-export default Signup;
+export default withAlert(Signup);
