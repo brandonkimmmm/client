@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { withAlert } from 'react-alert';
+import ListModal from '../components/ListModal';
 
 class ButtonAppBar extends Component {
     constructor(props) {
@@ -68,6 +69,9 @@ class ButtonAppBar extends Component {
                         <Button component={ Link } to="/" color="inherit">
                             Home
                         </Button>
+                        <ListModal
+                            user={this.props.user}
+                        />
                     </Toolbar>
                 </AppBar>
             )
