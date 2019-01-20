@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,7 +15,19 @@ class ButtonAppBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            redirect: false
+        }
+    }
 
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect) {
+            return <Redirect to='/' />
         }
     }
 
@@ -25,6 +37,7 @@ class ButtonAppBar extends Component {
         const body = await response.text();
         this.props.alert.show(body);
         this.props.setUser(undefined);
+        this.setRedirect();
     }
 
     isLogged() {
@@ -81,6 +94,7 @@ class ButtonAppBar extends Component {
     render() {
         return (
             <div>
+                {this.renderRedirect()}
                 {this.isLogged()}
             </div>
         );

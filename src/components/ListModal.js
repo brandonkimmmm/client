@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -31,8 +32,22 @@ const styles = theme => ({
 class ListModal extends React.Component {
     state = {
         open: false,
-        name: ''
+        redirect: false,
+        name: '',
+        list: undefined
     };
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect) {
+            return <Redirect to={`/lists/${this.state.list.id}`} />
+        }
+    }
 
     handleSubmit = async e => {
         e.preventDefault();
@@ -49,8 +64,10 @@ class ListModal extends React.Component {
         const body = await response.json();
         this.setState({
             name: '',
-            open: false
+            open: false,
+            list: body.list
         });
+        this.setRedirect();
         this.props.alert.show(body.message);
     }
 
@@ -71,6 +88,7 @@ class ListModal extends React.Component {
 
     return (
         <div>
+            {this.renderRedirect()}
             <Button onClick={this.handleOpen} color="inherit">Create New List</Button>
             <Modal
                 aria-labelledby="simple-modal-title"

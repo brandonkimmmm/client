@@ -4,6 +4,7 @@ import './App.css';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import List from './components/List';
 import ButtonAppBar from './components/Navbar';
 import { withAlert } from 'react-alert';
 
@@ -43,7 +44,6 @@ class App extends Component {
             user={this.state.user}
             setUser={(user) => this.setUser(user)}
           />
-          {/* <p>{this.state.response}</p> */}
         </header>
         <main>
           <Route exact path='/' component={Landing} />
@@ -54,6 +54,10 @@ class App extends Component {
           <Route
             path='/user/signin'
             render={(props) => <Signin user={this.state.user} setUser={(user) => this.setUser(user)} />}
+          />
+          <Route
+            path="/lists/:listId"
+            render={(props) => <List {...props} user={this.state.user} />}
           />
         </main>
       </div>
