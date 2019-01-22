@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import ListTable from './ListTable';
 import { withAlert } from 'react-alert';
+import MemberModal from './MemberModal';
 
 class List extends Component {
     constructor(props) {
@@ -46,11 +47,20 @@ class List extends Component {
         }
     }
 
+    checkIfOwner = () => {
+        if(this.state.list && this.props.user && this.state.list.userId === this.props.user.id) {
+            return (
+                <MemberModal list={this.state.list} />
+            )
+        }
+    }
+
     showList() {
         if(this.state.list) {
             return(
                 <section className="list">
                     <h1>{this.state.list.name}</h1>
+                    {this.checkIfOwner()}
                     <h4>Created By: {this.state.list.User.username}</h4>
                     <h4>Created At: {Date(this.state.list.createdAt)}</h4>
                     <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
