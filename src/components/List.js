@@ -67,6 +67,24 @@ class List extends Component {
                     <table>
                         <thead>
                             <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.list.members.map(function(member, i){
+                                return (
+                                    <tr key={i}>
+                                        <td>{member.User.username}</td>
+                                        <td>{member.User.email}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                    {/* <table>
+                        <thead>
+                            <tr>
                                 <th>Firstname</th>
                                 <th>Lastname</th>
                                 <th>Age</th>
@@ -84,7 +102,7 @@ class List extends Component {
                                 <td>94</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> */}
                 </section>
             )
         }

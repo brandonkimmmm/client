@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
@@ -45,7 +45,7 @@ class App extends Component {
             setUser={(user) => this.setUser(user)}
           />
         </header>
-        <main>
+        <Switch>
           <Route exact path='/' component={Landing} />
           <Route
             path='/user/signup'
@@ -59,7 +59,7 @@ class App extends Component {
             path="/lists/:listId"
             render={(props) => <List {...props} user={this.state.user} />}
           />
-        </main>
+        </Switch>
       </div>
     );
   }

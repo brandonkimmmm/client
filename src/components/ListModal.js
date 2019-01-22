@@ -37,6 +37,14 @@ class ListModal extends React.Component {
         list: undefined
     };
 
+    componentDidUpdate = () => {
+        if(this.state.redirect === true) {
+            this.setState({
+                redirect: false
+            })
+        }
+    }
+
     setRedirect = () => {
         this.setState({
             redirect: true
@@ -67,8 +75,8 @@ class ListModal extends React.Component {
             open: false,
             list: body.list
         });
-        this.setRedirect();
         this.props.alert.show(body.message);
+        this.setRedirect();
     }
 
     handleNameChange(event) {
