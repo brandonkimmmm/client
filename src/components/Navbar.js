@@ -19,6 +19,14 @@ class ButtonAppBar extends Component {
         }
     }
 
+    componentDidUpdate = () => {
+        if(this.state.redirect === true) {
+            this.setState({
+                redirect: false
+            })
+        }
+    }
+
     setRedirect = () => {
         this.setState({
             redirect: true
