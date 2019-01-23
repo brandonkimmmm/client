@@ -60,7 +60,10 @@ class App extends Component {
           />
         </header>
         <Switch>
-          <Route exact path='/' component={Landing} />
+          <Route
+            exact path='/'
+            render={(props) => <Landing user={this.state.user} />}
+          />
           <Route
             path='/user/signup'
             render={(props) => <Signup user={this.state.user} setUser={(user) => this.setUser(user)} alert={(message) => this.alert(message)}/>}
