@@ -20,11 +20,22 @@ class List extends Component {
             addMember(data);
         })
 
+        this.socket.on('MEMBER_REMOVED', function(data) {
+            removeMember(data);
+        })
+
         const addMember = data => {
             this.setState({
                 members: [...this.state.members, data]
             });
         }
+
+        const removeMember = data => {
+            this.setState({
+                members: data
+            });
+        }
+
     }
 
     componentDidMount() {
@@ -68,64 +79,93 @@ class List extends Component {
         });
     }
 
-    checkIfOwner = () => {
-        if(this.state.list && this.props.user && this.state.list.userId === this.props.user.id) {
-            return (
-                <MemberModal list={this.state.list} />
-            )
+    handleDelete = async (e, memberId) => {
+        e.preventDefault();
+        if(!this.props.user || this.props.user.id !== this.state.list.userId) {
+            await this.props.alert.show('Must be list owner to remove member');
+        } else {
+            const response = await fetch(`/api/lists/${this.state.list.id}/members/${memberId}/destroy`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                    listUserId: this.state.list.userId
+                })
+            })
+            const body = await response.json();
+            if (response.status !== 200) throw Error(body.message);
+            if(body.message === 'Member was deleted from list'){
+                this.socket.emit('REMOVE_MEMBER', body.members);
+            }
+            this.props.alert.show(body.message);
         }
     }
 
-    showList() {
+    showList = () => {
         if(this.state.list) {
-            return(
-                <section className="list">
-                    <h1>{this.state.list.name}</h1>
-                    {this.checkIfOwner()}
-                    <h4>Created By: {this.state.list.User.username}</h4>
-                    <h4>Created At: {Date(this.state.list.createdAt)}</h4>
-                    <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.members.map(function(member, i){
-                                return (
-                                    <tr key={i}>
-                                        <td>{member.User.username}</td>
-                                        <td>{member.User.email}</td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-                    {/* <table>
-                        <thead>
-                            <tr>
-                                <th>Firstname</th>
-                                <th>Lastname</th>
-                                <th>Age</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td>Eve</td>
-                                <td>Jackson</td>
-                                <td>94</td>
-                            </tr>
-                        </tbody>
-                    </table> */}
-                </section>
-            )
+            if(this.props.user && this.state.list.userId === this.props.user.id) {
+                return(
+                    <section className="list">
+                        <h1>{this.state.list.name}</h1>
+                        <MemberModal list={this.state.list} />
+                        <h4>Created By: {this.state.list.User.username}</h4>
+                        <h4>Created At: {Date(this.state.list.createdAt)}</h4>
+                        <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.members.map((member, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td>{member.User.username}</td>
+                                            <td>{member.User.email}</td>
+                                            <td>
+                                                <form onSubmit={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                    <input className="handleDelete" type="submit" value="Remove"></input>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </section>
+                )
+            } else {
+                return(
+                    <section className="list">
+                        <h1>{this.state.list.name}</h1>
+                        <h4>Created By: {this.state.list.User.username}</h4>
+                        <h4>Created At: {Date(this.state.list.createdAt)}</h4>
+                        <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.members.map(function(member, i){
+                                    return (
+                                        <tr key={i}>
+                                            <td>{member.User.username}</td>
+                                            <td>{member.User.email}</td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </section>
+                )
+            }
         }
     }
 
@@ -133,7 +173,7 @@ class List extends Component {
         return (
             <div>
                 {this.renderRedirect()}
-                {this.showList()}
+                {this.showList(this.showList.bind(this))}
             </div>
         )
     }
