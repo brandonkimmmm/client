@@ -7,10 +7,14 @@ import Signin from './components/Signin';
 import List from './components/List';
 import ButtonAppBar from './components/Navbar';
 import { withAlert } from 'react-alert';
+import Chat from './components/Chat';
+// import socketIOClient from 'socket.io-client';
+// import { ConsoleReporter } from 'jasmine';
 
 class App extends Component {
   state = {
-    user: undefined
+    user: undefined,
+    // endpoint: '/'
   }
 
   componentDidMount() {
@@ -21,10 +25,20 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
+  // send = () => {
+  //   const socket = socketIOClient(this.state.endpoint)
+
+  //   socket.emit('yosocket', 'i love you');
+  //   socket.on('yosocket', (reply) => {
+  //     console.log(reply);
+  //   })
+  // }
+
   callApi = async () => {
     const response = await fetch('/api/users/isAuthenticated');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
+    // this.send();
     return body.user;
   }
 

@@ -3,13 +3,27 @@ import { Redirect } from 'react-router-dom';
 import ListTable from './ListTable';
 import { withAlert } from 'react-alert';
 import MemberModal from './MemberModal';
+import io from 'socket.io-client';
 
 class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
             list: undefined,
-            redirect: false
+            members: [],
+            redirect: false,
+        }
+
+        this.socket = io('localhost:5000');
+
+        this.socket.on('MEMBER_ADDED', function(data) {
+            addMember(data);
+        })
+
+        const addMember = data => {
+            this.setState({
+                members: [...this.state.members, data]
+            });
         }
     }
 
@@ -17,7 +31,8 @@ class List extends Component {
         this.callApi()
         .then(res => {
             this.setState({
-                list: res.list
+                list: res.list,
+                members: res.members
             });
         })
         .catch(err => console.log(err));
@@ -47,6 +62,12 @@ class List extends Component {
         }
     }
 
+    memberAdded = () => {
+        this.socket.emit('ADD_MEMBER', {
+            list: this.state.list
+        });
+    }
+
     checkIfOwner = () => {
         if(this.state.list && this.props.user && this.state.list.userId === this.props.user.id) {
             return (
@@ -72,7 +93,7 @@ class List extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.list.members.map(function(member, i){
+                            {this.state.members.map(function(member, i){
                                 return (
                                     <tr key={i}>
                                         <td>{member.User.username}</td>

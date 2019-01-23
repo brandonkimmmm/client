@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import { withAlert } from 'react-alert';
+import io from 'socket.io-client';
 
 function getModalStyle() {
     const top = 50;
@@ -30,9 +31,15 @@ const styles = theme => ({
 });
 
 class MemberModal extends React.Component {
-    state = {
-        open: false,
-        username: ''
+    constructor(props){
+        super(props);
+
+        this.state = {
+            open: false,
+            username: ''
+        }
+
+        this.socket = io('localhost:5000');
     };
 
     handleSubmit = async e => {
@@ -47,6 +54,9 @@ class MemberModal extends React.Component {
             })
         })
         const body = await response.json();
+        if(body.message !== 'Error: User is already a member'){
+            this.socket.emit('ADD_MEMBER', body.member);
+        }
         this.setState({
             username: '',
             open: false
