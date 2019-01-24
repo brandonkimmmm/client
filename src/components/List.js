@@ -14,28 +14,18 @@ class List extends Component {
             redirect: false,
         }
 
-        this.socket = io('localhost:5000');
+    }
 
-        this.socket.on('MEMBER_ADDED', function(data) {
-            addMember(data);
-        })
+    addMember = data => {
+        this.setState({
+            members: [...this.state.members, data]
+        });
+    }
 
-        this.socket.on('MEMBER_REMOVED', function(data) {
-            removeMember(data);
-        })
-
-        const addMember = data => {
-            this.setState({
-                members: [...this.state.members, data]
-            });
-        }
-
-        const removeMember = data => {
-            this.setState({
-                members: data
-            });
-        }
-
+    removeMember = data => {
+        this.setState({
+            members: data
+        });
     }
 
     componentDidMount() {
@@ -47,6 +37,25 @@ class List extends Component {
             });
         })
         .catch(err => console.log(err));
+        this.socket = io('localhost:5000');
+
+        this.socket.on('MEMBER_ADDED', (data) => {
+            if(data.listId === this.state.list.id) {
+                this.addMember(data);
+            }
+        })
+
+        this.socket.on('MEMBER_REMOVED', (data) => {
+            if(data[0].listId === this.state.list.id) {
+                this.removeMember(data);
+            }
+        })
+
+        this.socket.open();
+    }
+
+    componentWillUnmount() {
+        this.socket.close();
     }
 
     callApi = async () => {

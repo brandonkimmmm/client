@@ -54,7 +54,7 @@ class MemberModal extends React.Component {
             })
         })
         const body = await response.json();
-        if(body.message !== 'Error: User is already a member'){
+        if(body.message === 'Member successfully added'){
             this.socket.emit('ADD_MEMBER', body.member);
         }
         this.setState({
