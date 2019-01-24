@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import { withAlert } from 'react-alert';
+import io from 'socket.io-client';
 
 function getModalStyle() {
     const top = 50;
@@ -30,12 +31,17 @@ const styles = theme => ({
 });
 
 class ListModal extends React.Component {
-    state = {
-        open: false,
-        redirect: false,
-        name: '',
-        list: undefined
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            open: false,
+            redirect: false,
+            name: '',
+            list: undefined
+        };
+
+        this.socket = io('localhost:5000');
+    }
 
     componentDidUpdate = () => {
         if(this.state.redirect === true) {
@@ -70,6 +76,7 @@ class ListModal extends React.Component {
             })
         })
         const body = await response.json();
+        this.socket.emit('ADD_LIST', body.list);
         this.setState({
             name: '',
             open: false,
@@ -77,6 +84,11 @@ class ListModal extends React.Component {
         });
         this.props.alert.show(body.message);
         this.setRedirect();
+        this.socket.open();
+    }
+
+    componentWillUnmount() {
+        this.socket.close();
     }
 
     handleNameChange(event) {

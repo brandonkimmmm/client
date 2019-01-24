@@ -71,6 +71,7 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import io from 'socket.io-client';
 
 class ShowLists extends Component {
     constructor(props) {
@@ -79,6 +80,7 @@ class ShowLists extends Component {
             userLists: [],
             userMemberships: []
         }
+
     }
 
     componentDidMount() {
@@ -92,6 +94,25 @@ class ShowLists extends Component {
             })
             .catch(err => console.log(err));
         }
+        this.socket = io('localhost:5000');
+
+        this.socket.on('LIST_ADDED', (data) => {
+            if(this.props.user.id === data.userId) {
+                this.addList(data);
+            }
+        })
+
+        this.socket.on('MEMBER_ADDED', (data) => {
+            if(this.props.user.id === data.userId) {
+                this.addMembership(data);
+            }
+        })
+
+        this.socket.open();
+    }
+
+    componentWillUnmount() {
+        this.socket.close();
     }
 
     callApi = async () => {
@@ -99,6 +120,19 @@ class ShowLists extends Component {
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
         return body;
+    }
+
+    addList = data => {
+        this.setState({
+            userLists: [...this.state.userLists, data],
+            userMemberships: [...this.state.userMemberships, data]
+        });
+    }
+
+    addMembership = data => {
+        this.setState({
+            userMemberships: [...this.state.userMemberships, data]
+        });
     }
 
     showUserLists() {
@@ -121,11 +155,13 @@ class ShowLists extends Component {
         if(this.state.userMemberships.length === 0) {
             return <li>Nothing here...</li>
         } else {
+            let list ;
             return this.state.userMemberships.map((membership, i) => {
+                list = membership.List || membership;
                 return (
-                    <Link to={`/lists/${membership.List.id}`} key={i}>
+                    <Link to={`/lists/${list.id}`} key={i}>
                         <li>
-                            {membership.List.name}
+                            {list.name}
                         </li>
                     </Link>
                 )

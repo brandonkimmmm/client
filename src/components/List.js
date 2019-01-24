@@ -46,8 +46,8 @@ class List extends Component {
         })
 
         this.socket.on('MEMBER_REMOVED', (data) => {
-            if(data[0].listId === this.state.list.id) {
-                this.removeMember(data);
+            if(data.listId == this.state.list.id) {
+                this.removeMember(data.members);
             }
         })
 
@@ -106,7 +106,7 @@ class List extends Component {
             const body = await response.json();
             if (response.status !== 200) throw Error(body.message);
             if(body.message === 'Member was deleted from list'){
-                this.socket.emit('REMOVE_MEMBER', body.members);
+                this.socket.emit('REMOVE_MEMBER', body);
             }
             this.props.alert.show(body.message);
         }
