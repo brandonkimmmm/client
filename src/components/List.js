@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import ListTable from './ListTable';
 import { withAlert } from 'react-alert';
 import MemberModal from './MemberModal';
+import Items from './Items';
 import io from 'socket.io-client';
 
 class List extends Component {
@@ -62,7 +63,7 @@ class List extends Component {
         const response = await fetch(`/api/lists/${this.props.match.params.listId}`);
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
-        if(Object.keys(body).length === 0 && body.constructor === Object) {
+        if(!body.list) {
             this.props.alert.show('Error: no lists found with that id');
             this.setRedirect();
             throw Error('No list found with that id');
@@ -183,6 +184,7 @@ class List extends Component {
             <div>
                 {this.renderRedirect()}
                 {this.showList(this.showList.bind(this))}
+                <Items list={this.state.list} user={this.props.user}/>
             </div>
         )
     }
