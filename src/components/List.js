@@ -10,6 +10,7 @@ class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: undefined,
             list: undefined,
             members: [],
             redirect: false,
@@ -57,6 +58,14 @@ class List extends Component {
 
     componentWillUnmount() {
         this.socket.close();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.user !== prevProps.user) {
+            this.setState({
+                user: this.props.user
+            })
+        }
     }
 
     callApi = async () => {

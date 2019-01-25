@@ -67,7 +67,9 @@ class NewItemModal extends React.Component {
             })
         })
         const body = await response.json();
-        this.socket.emit('ADD_ITEM', body.item);
+        if(body.item) {
+            this.socket.emit('ADD_ITEM', body.item);
+        }
         this.setState({
             name: '',
             amount: 0,

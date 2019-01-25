@@ -44,31 +44,14 @@ class ShowItems extends React.Component {
         }
     }
 
-    handleToggle = item => () => {
-        // const { checked } = this.state;
-        // const currentIndex = checked.indexOf(item);
-        // const newChecked = [...checked];
-
-        // if (currentIndex === -1) {
-        //     newChecked.push(item);
-        // } else {
-        //     newChecked.splice(currentIndex, 1);
-        // }
-
-        // this.setState({
-        //     checked: item,
-        // });
-    };
-
     itemsTable = () => {
         if(this.state.items) {
             const { classes } = this.props;
             return (
                 <List className={classes.root}>
                     {this.state.items.map((item, i) => (
-                        <ListItem key={i} role={undefined} dense button onClick={this.handleToggle(item)}>
+                        <ListItem key={i} role={undefined} dense button onClick={this.props.handleToggle(item)}>
                             <Checkbox
-                                // checked={this.state.checked.indexOf(item) !== -1}
                                 checked={item.purchased}
                                 tabIndex={-1}
                                 disableRipple
