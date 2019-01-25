@@ -30,9 +30,9 @@ class Items extends Component {
             }
         })
 
-        this.socket.on('ITEM_TOGGLED', (data) => {
+        this.socket.on('ITEM_UPDATED', (data) => {
             if(data[0].listId === this.props.list.id) {
-                this.toggleItem(data);
+                this.updateItems(data);
             }
         })
 
@@ -58,7 +58,7 @@ class Items extends Component {
         });
     }
 
-    toggleItem = data => {
+    updateItems = data => {
         this.setState({
             items: [...data]
         })
@@ -102,7 +102,45 @@ class Items extends Component {
             const body = await response.json();
             if (response.status !== 200) throw Error(body.message);
             if(body.message === 'Item successfully updated'){
-                this.socket.emit('TOGGLE_ITEM', body.items);
+                this.socket.emit('UPDATE_ITEM', body.items);
+            }
+            return body;
+        }
+    }
+
+    handleUpdate = item => {
+        console.log('hello');
+        this.callUpdateApi(item)
+        .then(res => {
+            if(res.items.length !== 0) {
+                this.setState({
+                    items: res.items
+                })
+            }
+        })
+        .catch(err => console.log(err));
+    };
+
+    callUpdateApi = async (item) => {
+        if(!this.props.user || this.props.user.id !== this.props.list.userId) {
+            await this.props.alert.show('Must be list owner or member to update item');
+        } else {
+            const response = await fetch(`/api/lists/${this.props.list.id}/items/${item.id}/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                    name: item.name,
+                    amount: item.amount,
+                    purchased: item.purchased
+                })
+            })
+            const body = await response.json();
+            if (response.status !== 200) throw Error(body.message);
+            if(body.message === 'Item successfully updated'){
+                this.socket.emit('UPDATE_ITEM', body.items);
             }
             return body;
         }
@@ -117,7 +155,7 @@ class Items extends Component {
     render() {
         return (
             <div>
-                <ShowItems items={this.state.items} handleToggle={(item) => this.handleToggle(item)}/>
+                <ShowItems items={this.state.items} handleUpdate={((item) => this.handleUpdate(item))} handleToggle={(item) => this.handleToggle(item)}/>
                 {this.showNewItemButton()}
             </div>
         )

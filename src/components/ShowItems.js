@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
 import io from 'socket.io-client';
+import UpdateItemModal from './UpdateItemModal';
 
 const styles = theme => ({
     root: {
@@ -56,17 +57,14 @@ class ShowItems extends React.Component {
                                 tabIndex={-1}
                                 disableRipple
                             />
-                            <ListItemText primary={item.name} />
-                            <ListItemText primary={item.amount} />
-                            {/* <ListItemSecondaryAction>
-                            <IconButton aria-label="Comments">
-                                <CommentIcon />
-                            </IconButton>
-                            </ListItemSecondaryAction> */}
+                            <ListItemText primary={item.name} secondary={item.amount} />
+                            <ListItemSecondaryAction>
+                                <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
+                            </ListItemSecondaryAction>
                         </ListItem>
                     ))}
                 </List>
-            );
+            )
         }
     }
 
