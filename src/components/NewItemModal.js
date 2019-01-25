@@ -36,16 +36,25 @@ class NewItemModal extends React.Component {
         this.state = {
             open: false,
             name: '',
-            amount: 1
+            amount: 1,
+            list: undefined
         };
 
         this.socket = io('localhost:5000');
         this.socket.open();
     }
 
+    componentDidUpdate(prevProps) {
+        if(this.props.list !== prevProps.list) {
+            this.setState({
+                list: this.props.list
+            })
+        }
+    }
+
     handleSubmit = async e => {
         e.preventDefault();
-        const response = await fetch(`/api/lists/${this.props.listId}/items/create`, {
+        const response = await fetch(`/api/lists/${this.props.list.id}/items/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +63,7 @@ class NewItemModal extends React.Component {
                 userId: this.props.userId,
                 name: this.state.name,
                 amount: this.state.amount,
-                listId: this.props.listId
+                listId: this.props.list.id
             })
         })
         const body = await response.json();

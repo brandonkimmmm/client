@@ -146,6 +146,7 @@ class List extends Component {
                                 })}
                             </tbody>
                         </table>
+                        <Items list={this.state.list} user={this.props.user}/>
                     </section>
                 )
             } else {
@@ -173,6 +174,7 @@ class List extends Component {
                                 })}
                             </tbody>
                         </table>
+                        <Items list={this.state.list} user={this.props.user}/>
                     </section>
                 )
             }
@@ -184,7 +186,6 @@ class List extends Component {
             <div>
                 {this.renderRedirect()}
                 {this.showList(this.showList.bind(this))}
-                <Items list={this.state.list} user={this.props.user}/>
             </div>
         )
     }

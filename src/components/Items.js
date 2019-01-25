@@ -8,54 +8,67 @@ class Items extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [1, 2, 3],
-            listId: undefined
+            items: [],
+            list: undefined
         }
     }
 
     componentDidMount() {
-        // this.callApi()
-        // .then((res) => {
+        this.callApi()
+        .then(res => {
             this.setState({
-                // items: res.items,
+                items: res.items
             });
-        // })
-        // .catch((err) => console.log(err));
+        })
+        .catch(err => console.log(err));
 
-        // this.socket = io('localhost:5000');
+        this.socket = io('localhost:5000');
 
-        // this.socket.open()
+        this.socket.on('ITEM_ADDED', (data) => {
+            if(data.listId === this.props.list.id) {
+                this.addItem(data);
+            }
+        })
+
+        this.socket.open()
 
     }
 
     componentDidUpdate(prevProps) {
         if(this.props.list !== prevProps.list) {
             this.setState({
-                listId: this.props.list.id
+                list: this.props.list
             })
         }
     }
 
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
-    // callApi = async () => {
-    //     const response = await fetch(`/api/lists/${this.props.list.id}/items`);
-    //     const body = await response.json();
-    //     if(response.status !== 200) throw Error(body.message);
-    // }
+    addItem = data => {
+        this.setState({
+            items: [...this.state.items, data]
+        });
+    }
+
+    callApi = async () => {
+        const response = await fetch(`/api/lists/${this.props.list.id}/items`);
+        const body = await response.json();
+        if (response.status !== 200) throw Error(body);
+        return body;
+    }
 
     showNewItemButton() {
         if(this.props.user) {
-            return <NewItemModal listId={this.state.listId} userId={this.props.user.id} />
+            return <NewItemModal list={this.props.list} userId={this.props.user.id} />
         }
     }
 
     render() {
         return (
             <div>
-                <ShowItems/>
+                <ShowItems items={this.state.items} />
                 {this.showNewItemButton()}
             </div>
         )
