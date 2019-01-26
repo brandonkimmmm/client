@@ -108,12 +108,12 @@ class ShowLists extends Component {
             }
         })
 
-        this.socket.open();
+        // this.socket.open();
     }
 
-    componentWillUnmount() {
-        this.socket.close();
-    }
+    // componentWillUnmount() {
+    //     this.socket.close();
+    // }
 
     callApi = async () => {
         const response = await fetch(`/api/users/${this.props.user.id}/lists`);

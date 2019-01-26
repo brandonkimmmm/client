@@ -36,7 +36,13 @@ class Items extends Component {
             }
         })
 
-        this.socket.open()
+        this.socket.on('ITEM_DELETED', (data) => {
+            if(data.listId === this.props.list.id) {
+                this.deleteItem(data.items);
+            }
+        })
+
+        // this.socket.open()
 
     }
 
@@ -48,9 +54,9 @@ class Items extends Component {
         }
     }
 
-    componentWillUnmount() {
-        this.socket.close();
-    }
+    // componentWillUnmount() {
+    //     this.socket.close();
+    // }
 
     addItem = data => {
         this.setState({
@@ -59,6 +65,12 @@ class Items extends Component {
     }
 
     updateItems = data => {
+        this.setState({
+            items: [...data]
+        })
+    }
+
+    deleteItem = data => {
         this.setState({
             items: [...data]
         })
@@ -74,7 +86,7 @@ class Items extends Component {
     handleToggle = item => () => {
         this.callToggleApi(item)
         .then(res => {
-            if(res.items.length !== 0) {
+            if(res && res.items.length !== 0) {
                 this.setState({
                     items: res.items
                 })
@@ -86,6 +98,7 @@ class Items extends Component {
     callToggleApi = async (item) => {
         if(!this.props.user || this.props.user.id !== this.props.list.userId) {
             await this.props.alert.show('Must be list owner or member to update item');
+            return;
         } else {
             const response = await fetch(`/api/lists/${this.props.list.id}/items/${item.id}/update`, {
                 method: 'POST',
@@ -109,10 +122,9 @@ class Items extends Component {
     }
 
     handleUpdate = item => {
-        console.log('hello');
         this.callUpdateApi(item)
         .then(res => {
-            if(res.items.length !== 0) {
+            if(res && res.items.length !== 0) {
                 this.setState({
                     items: res.items
                 })
@@ -124,6 +136,7 @@ class Items extends Component {
     callUpdateApi = async (item) => {
         if(!this.props.user || this.props.user.id !== this.props.list.userId) {
             await this.props.alert.show('Must be list owner or member to update item');
+            return;
         } else {
             const response = await fetch(`/api/lists/${this.props.list.id}/items/${item.id}/update`, {
                 method: 'POST',
@@ -146,6 +159,42 @@ class Items extends Component {
         }
     }
 
+    handleDelete = id => {
+        this.callDeleteApi(id)
+        .then(res => {
+            if(res && res.items) {
+                this.setState({
+                    items: res.items
+                })
+            }
+        })
+        .catch(err => console.log(err));
+    }
+
+    callDeleteApi = async (id) => {
+        if(!this.props.user || this.props.user.id !== this.props.list.userId) {
+            this.props.alert.show('Must be list owner or member to delete item');
+            return;
+        } else {
+            const response = await fetch(`/api/lists/${this.props.list.id}/items/${id}/destroy`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: this.props.user.id
+                })
+            })
+            const body = await response.json();
+            if (response.status !== 200) throw Error(body.message);
+            if(body.message === 'Item was deleted from list'){
+                this.socket.emit('DELETE_ITEM', body);
+            }
+            this.props.alert.show(body.message);
+            return body;
+        }
+    }
+
     showNewItemButton() {
         if(this.props.user) {
             return <NewItemModal list={this.props.list} userId={this.props.user.id} />
@@ -155,7 +204,7 @@ class Items extends Component {
     render() {
         return (
             <div>
-                <ShowItems items={this.state.items} handleUpdate={((item) => this.handleUpdate(item))} handleToggle={(item) => this.handleToggle(item)}/>
+                <ShowItems list={this.props.list} user={this.props.user} items={this.state.items} handleUpdate={((item) => this.handleUpdate(item))} handleToggle={(item) => this.handleToggle(item)} handleDelete={(id) => this.handleDelete(id)}/>
                 {this.showNewItemButton()}
             </div>
         )

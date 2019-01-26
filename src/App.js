@@ -8,16 +8,17 @@ import List from './components/List';
 import ButtonAppBar from './components/Navbar';
 import { withAlert } from 'react-alert';
 import Chat from './components/Chat';
-// import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
 // import { ConsoleReporter } from 'jasmine';
 
 class App extends Component {
   state = {
     user: undefined,
-    // endpoint: '/'
   }
 
   componentDidMount() {
+    this.socket = io('localhost:5000');
+    this.socket.open()
     this.callApi()
     .then(res => {
       this.setState({ user: res });
@@ -25,13 +26,8 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
-  // send = () => {
-  //   const socket = socketIOClient(this.state.endpoint)
-
-  //   socket.emit('yosocket', 'i love you');
-  //   socket.on('yosocket', (reply) => {
-  //     console.log(reply);
-  //   })
+  // componentWillUnmount() {
+  //   this.socket.close();
   // }
 
   callApi = async () => {

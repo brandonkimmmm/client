@@ -42,7 +42,7 @@ class UpdateItemModal extends React.Component {
         };
 
         this.socket = io('localhost:5000');
-        this.socket.open();
+        // this.socket.open();
     }
 
     componentDidMount() {
@@ -83,9 +83,9 @@ class UpdateItemModal extends React.Component {
         })
     }
 
-    componentWillUnmount() {
-        this.socket.close();
-    }
+    // componentWillUnmount() {
+    //     this.socket.close();
+    // }
 
     handleNameChange(event) {
         this.setState({ name: event.target.value });
@@ -107,7 +107,7 @@ class UpdateItemModal extends React.Component {
         const { classes } = this.props;
 
     return (
-        <div>
+        <span>
             <Button onClick={this.handleOpen} color="inherit">Update</Button>
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -142,7 +142,7 @@ class UpdateItemModal extends React.Component {
                     </Typography>
                 </div>
             </Modal>
-        </div>
+        </span>
         );
     }
 }

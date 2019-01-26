@@ -53,12 +53,12 @@ class List extends Component {
             }
         })
 
-        this.socket.open();
+        // this.socket.open();
     }
 
-    componentWillUnmount() {
-        this.socket.close();
-    }
+    // componentWillUnmount() {
+    //     this.socket.close();
+    // }
 
     componentDidUpdate(prevProps) {
         if(this.props.user !== prevProps.user) {
@@ -163,7 +163,7 @@ class List extends Component {
                     <section className="list">
                         <h1>{this.state.list.name}</h1>
                         <h4>Created By: {this.state.list.User.username}</h4>
-                        <h4>Created At: {Date(this.state.list.createdAt)}</h4>
+                        {/* <h4>Created At: {Date(this.state.list.createdAt)}</h4> */}
                         <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
                         <table>
                             <thead>
