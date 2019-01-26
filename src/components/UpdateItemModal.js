@@ -41,7 +41,7 @@ class UpdateItemModal extends React.Component {
             item: undefined
         };
 
-        this.socket = io('localhost:5000');
+        this.socket = io();
         // this.socket.open();
     }
 

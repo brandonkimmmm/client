@@ -81,6 +81,20 @@ class ShowLists extends Component {
             userMemberships: []
         }
 
+        this.socket = io();
+
+        this.socket.on('LIST_ADDED', (data) => {
+            if(this.props.user.id === data.userId) {
+                this.addList(data);
+            }
+        })
+
+        this.socket.on('MEMBER_ADDED', (data) => {
+            if(this.props.user.id === data.userId) {
+                this.addMembership(data);
+            }
+        })
+
     }
 
     componentDidMount() {
@@ -94,19 +108,6 @@ class ShowLists extends Component {
             })
             .catch(err => console.log(err));
         }
-        this.socket = io('localhost:5000');
-
-        this.socket.on('LIST_ADDED', (data) => {
-            if(this.props.user.id === data.userId) {
-                this.addList(data);
-            }
-        })
-
-        this.socket.on('MEMBER_ADDED', (data) => {
-            if(this.props.user.id === data.userId) {
-                this.addMembership(data);
-            }
-        })
 
         // this.socket.open();
     }

@@ -39,7 +39,7 @@ class MemberModal extends React.Component {
             username: ''
         }
 
-        this.socket = io('localhost:5000');
+        this.socket = io();
     };
 
     handleSubmit = async e => {

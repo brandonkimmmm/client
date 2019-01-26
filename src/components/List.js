@@ -16,6 +16,20 @@ class List extends Component {
             redirect: false,
         }
 
+        this.socket = io();
+
+        this.socket.on('MEMBER_ADDED', (data) => {
+            if(data.listId === this.state.list.id) {
+                this.addMember(data);
+            }
+        })
+
+        this.socket.on('MEMBER_REMOVED', (data) => {
+            if(data.listId == this.state.list.id) {
+                this.removeMember(data.members);
+            }
+        })
+
     }
 
     addMember = data => {
@@ -39,19 +53,6 @@ class List extends Component {
             });
         })
         .catch(err => console.log(err));
-        this.socket = io('localhost:5000');
-
-        this.socket.on('MEMBER_ADDED', (data) => {
-            if(data.listId === this.state.list.id) {
-                this.addMember(data);
-            }
-        })
-
-        this.socket.on('MEMBER_REMOVED', (data) => {
-            if(data.listId == this.state.list.id) {
-                this.removeMember(data.members);
-            }
-        })
 
         // this.socket.open();
     }

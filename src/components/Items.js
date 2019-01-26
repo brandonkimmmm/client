@@ -11,18 +11,8 @@ class Items extends Component {
             items: [],
             list: undefined
         }
-    }
 
-    componentDidMount() {
-        this.callApi()
-        .then(res => {
-            this.setState({
-                items: res.items
-            });
-        })
-        .catch(err => console.log(err));
-
-        this.socket = io('localhost:5000');
+        this.socket = io();
 
         this.socket.on('ITEM_ADDED', (data) => {
             if(data.listId === this.props.list.id) {
@@ -41,6 +31,16 @@ class Items extends Component {
                 this.deleteItem(data.items);
             }
         })
+    }
+
+    componentDidMount() {
+        this.callApi()
+        .then(res => {
+            this.setState({
+                items: res.items
+            });
+        })
+        .catch(err => console.log(err));
 
         // this.socket.open()
 

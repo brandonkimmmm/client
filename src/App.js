@@ -12,13 +12,17 @@ import io from 'socket.io-client';
 // import { ConsoleReporter } from 'jasmine';
 
 class App extends Component {
-  state = {
-    user: undefined,
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: undefined,
+    }
+
+    this.socket = io();
+    this.socket.open()
   }
 
   componentDidMount() {
-    this.socket = io('localhost:5000');
-    this.socket.open()
     this.callApi()
     .then(res => {
       this.setState({ user: res });

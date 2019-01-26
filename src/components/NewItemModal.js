@@ -40,7 +40,7 @@ class NewItemModal extends React.Component {
             list: undefined
         };
 
-        this.socket = io('localhost:5000');
+        this.socket = io();
         // this.socket.open();
     }
 
