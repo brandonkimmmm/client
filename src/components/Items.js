@@ -155,6 +155,7 @@ class Items extends Component {
             if(body.message === 'Item successfully updated'){
                 this.socket.emit('UPDATE_ITEM', body.items);
             }
+            this.props.alert.show(body.message);
             return body;
         }
     }

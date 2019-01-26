@@ -36,8 +36,8 @@ class UpdateItemModal extends React.Component {
         this.state = {
             open: false,
             name: '',
-            amount: undefined,
-            purchased: undefined,
+            amount: 0,
+            purchased: false,
             item: undefined
         };
 
@@ -77,8 +77,8 @@ class UpdateItemModal extends React.Component {
         this.setState({
             open: false,
             name: '',
-            amount: undefined,
-            purchased: undefined,
+            amount: 0,
+            purchased: false,
             item: undefined
         })
     }

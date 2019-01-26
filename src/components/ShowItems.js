@@ -56,7 +56,7 @@ class ShowItems extends React.Component {
             const { classes } = this.props;
             return (
                 <List className={classes.root}>
-                    {this.state.items.map((item, i) => (
+                    {this.props.items.map((item, i) => (
                         <ListItem key={i} role={undefined} dense button onClick={this.props.handleToggle(item)}>
                             <Checkbox
                                 checked={item.purchased}
