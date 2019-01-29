@@ -41,8 +41,6 @@ class UpdateItemModal extends React.Component {
             item: undefined
         };
 
-        this.socket = io();
-        // this.socket.open();
     }
 
     componentDidMount() {
@@ -82,10 +80,6 @@ class UpdateItemModal extends React.Component {
             item: undefined
         })
     }
-
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
 
     handleNameChange(event) {
         this.setState({ name: event.target.value });

@@ -40,7 +40,12 @@ class MemberModal extends React.Component {
         }
 
         this.socket = io();
+        this.socket.open();
     };
+
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
     handleSubmit = async e => {
         e.preventDefault();

@@ -18,6 +18,8 @@ class List extends Component {
 
         this.socket = io();
 
+        this.socket.open();
+
         this.socket.on('MEMBER_ADDED', (data) => {
             if(data.listId === this.state.list.id) {
                 this.addMember(data);
@@ -53,13 +55,11 @@ class List extends Component {
             });
         })
         .catch(err => console.log(err));
-
-        // this.socket.open();
     }
 
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
     componentDidUpdate(prevProps) {
         if(this.props.user !== prevProps.user) {

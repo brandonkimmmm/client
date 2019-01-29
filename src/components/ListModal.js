@@ -41,6 +41,8 @@ class ListModal extends React.Component {
         };
 
         this.socket = io();
+        this.socket.open();
+
     }
 
     componentDidUpdate = () => {
@@ -84,12 +86,11 @@ class ListModal extends React.Component {
         });
         this.props.alert.show(body.message);
         this.setRedirect();
-        // this.socket.open();
     }
 
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
     handleNameChange(event) {
         this.setState({ name: event.target.value });

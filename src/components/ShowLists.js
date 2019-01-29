@@ -83,6 +83,8 @@ class ShowLists extends Component {
 
         this.socket = io();
 
+        this.socket.open();
+
         this.socket.on('LIST_ADDED', (data) => {
             if(this.props.user.id === data.userId) {
                 this.addList(data);
@@ -108,13 +110,11 @@ class ShowLists extends Component {
             })
             .catch(err => console.log(err));
         }
-
-        // this.socket.open();
     }
 
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
     callApi = async () => {
         const response = await fetch(`/api/users/${this.props.user.id}/lists`);

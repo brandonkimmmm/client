@@ -14,6 +14,8 @@ class Items extends Component {
 
         this.socket = io();
 
+        this.socket.open();
+
         this.socket.on('ITEM_ADDED', (data) => {
             if(data.listId === this.props.list.id) {
                 this.addItem(data);
@@ -41,9 +43,6 @@ class Items extends Component {
             });
         })
         .catch(err => console.log(err));
-
-        // this.socket.open()
-
     }
 
     componentDidUpdate(prevProps) {
@@ -54,9 +53,9 @@ class Items extends Component {
         }
     }
 
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
+    componentWillUnmount() {
+        this.socket.close();
+    }
 
     addItem = data => {
         this.setState({

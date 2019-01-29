@@ -17,9 +17,6 @@ class App extends Component {
     this.state = {
       user: undefined,
     }
-
-    this.socket = io();
-    this.socket.open()
   }
 
   componentDidMount() {
@@ -30,15 +27,11 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
-  // componentWillUnmount() {
-  //   this.socket.close();
-  // }
 
   callApi = async () => {
     const response = await fetch('/api/users/isAuthenticated');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
-    // this.send();
     return body.user;
   }
 

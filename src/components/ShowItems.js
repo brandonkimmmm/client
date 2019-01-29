@@ -29,15 +29,6 @@ class ShowItems extends React.Component {
         };
     }
 
-    // componentDidMount() {
-    //     this.socket = io('localhost:5000');
-        // this.socket.open();
-    // }
-
-    // componentWillUnmount() {
-    //     this.socket.close();
-    // }
-
     componentDidUpdate(prevProps) {
         if(this.props.items !== prevProps.items) {
             this.setState({
