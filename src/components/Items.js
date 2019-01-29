@@ -29,7 +29,7 @@ class Items extends Component {
         })
 
         this.socket.on('ITEM_DELETED', (data) => {
-            if(data.listId === this.props.list.id) {
+            if(data.listId == this.props.list.id) {
                 this.deleteItem(data.items);
             }
         })
