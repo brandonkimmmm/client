@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
-import ListTable from './ListTable';
 import { withAlert } from 'react-alert';
 import MemberModal from './MemberModal';
 import Items from './Items';
 import io from 'socket.io-client';
+import { Button, Paper, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import './list.css';
 
 class List extends Component {
     constructor(props) {
@@ -16,7 +18,7 @@ class List extends Component {
             redirect: false,
         }
 
-        this.socket = io();
+        this.socket = io('localhost:5000');
 
         this.socket.open();
 
@@ -31,7 +33,6 @@ class List extends Component {
                 this.removeMember(data.members);
             }
         })
-
     }
 
     addMember = data => {
@@ -127,65 +128,111 @@ class List extends Component {
         if(this.state.list) {
             if(this.props.user && this.state.list.userId === this.props.user.id) {
                 return(
-                    <section className="list">
-                        <h1>{this.state.list.name}</h1>
-                        <MemberModal list={this.state.list} />
-                        <h4>Created By: {this.state.list.User.username}</h4>
-                        <h4>Created At: {Date(this.state.list.createdAt)}</h4>
-                        <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.members.map((member, i) => {
-                                    return (
-                                        <tr key={i}>
-                                            <td>{member.User.username}</td>
-                                            <td>{member.User.email}</td>
-                                            <td>
-                                                <form onSubmit={ (e, memberId) => this.handleDelete(e, member.id) }>
-                                                    <input className="handleDelete" type="submit" value="Remove"></input>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                        <Items list={this.state.list} user={this.props.user}/>
-                    </section>
+                    <Fragment>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Paper className="list-heading">
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography className="list-title" variant="h1" align="center">{this.state.list.name}</Typography>
+                                            <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                            <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={8}>
+                                <Paper>
+                                    <Typography variant="h2" align="center">Items</Typography>
+                                    <br></br>
+                                    <Items list={this.state.list} user={this.props.user}/>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Paper>
+                                    <Typography variant="h2" align="center">
+                                        Members
+                                        <br></br>
+                                        <MemberModal list={this.state.list} />
+                                    </Typography>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Username</TableCell>
+                                                <TableCell>Email</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {this.state.members.map((member, i) => {
+                                                return (
+                                                    <TableRow key={i}>
+                                                        <TableCell>{member.User.username}</TableCell>
+                                                        <TableCell>{member.User.email}</TableCell>
+                                                        <TableCell>
+                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                                <DeleteIcon />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Fragment>
                 )
             } else {
                 return(
-                    <section className="list">
-                        <h1>{this.state.list.name}</h1>
-                        <h4>Created By: {this.state.list.User.username}</h4>
-                        {/* <h4>Created At: {Date(this.state.list.createdAt)}</h4> */}
-                        <h4>Last Updated At: {Date(this.state.list.updatedAt)}</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.members.map(function(member, i){
-                                    return (
-                                        <tr key={i}>
-                                            <td>{member.User.username}</td>
-                                            <td>{member.User.email}</td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                        <Items list={this.state.list} user={this.props.user}/>
-                    </section>
+                    <Fragment>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Paper className="list-heading">
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography className="list-title" variant="h1" align="center">{this.state.list.name}</Typography>
+                                            <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                            <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={8}>
+                                <Paper>
+                                    <Typography variant="h2" align="center">Items</Typography>
+                                    <Items list={this.state.list} user={this.props.user}/>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Paper>
+                                    <Typography variant="h2" align="center">Members</Typography>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Username</TableCell>
+                                                <TableCell>Email</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {this.state.members.map((member, i) => {
+                                                return (
+                                                    <TableRow key={i}>
+                                                        <TableCell>{member.User.username}</TableCell>
+                                                        <TableCell>{member.User.email}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Fragment>
                 )
             }
         }
@@ -193,10 +240,10 @@ class List extends Component {
 
     render() {
         return (
-            <div>
+            <Fragment>
                 {this.renderRedirect()}
                 {this.showList(this.showList.bind(this))}
-            </div>
+            </Fragment>
         )
     }
 }

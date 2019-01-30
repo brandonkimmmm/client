@@ -1,77 +1,7 @@
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
-// import List from '@material-ui/core/List';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
-// import ListItemText from '@material-ui/core/ListItemText';
-// import Divider from '@material-ui/core/Divider';
-// import InboxIcon from '@material-ui/icons/Inbox';
-// import DraftsIcon from '@material-ui/icons/Drafts';
-
-// const styles = theme => ({
-//     root: {
-//         width: '100%',
-//         maxWidth: 800,
-//         backgroundColor: theme.palette.background.paper,
-//         position: 'relative',
-//         overflow: 'auto',
-//         maxHeight: 600,
-//         margin: '50px auto'
-//     },
-//     listSection: {
-//         backgroundColor: 'inherit',
-//     },
-//     ul: {
-//         backgroundColor: 'inherit',
-//         padding: 0,
-//     },
-// });
-
-// function ListItemLink(props) {
-//     return <ListItem button component="a" {...props} />;
-// }
-
-// function SimpleList(props) {
-//     const { classes } = props;
-//     return (
-//         <div className={classes.root}>
-//             <List component="nav">
-//                 <ListItem button>
-//                     <ListItemIcon>
-//                         <InboxIcon />
-//                     </ListItemIcon>
-//                     <ListItemText primary="Inbox" />
-//                 </ListItem>
-//                     <ListItem button>
-//                     <ListItemIcon>
-//                         <DraftsIcon />
-//                     </ListItemIcon>
-//                     <ListItemText primary="Drafts" />
-//                 </ListItem>
-//             </List>
-//             <Divider />
-//                 <List component="nav">
-//                     <ListItem button>
-//                         <ListItemText primary="Trash" />
-//                     </ListItem>
-//                     <ListItemLink href="#simple-list">
-//                     <ListItemText primary="Spam" />
-//                 </ListItemLink>
-//             </List>
-//         </div>
-//     );
-// }
-
-// SimpleList.propTypes = {
-//     classes: PropTypes.object.isRequired,
-// };
-
-// export default withStyles(styles)(SimpleList);
-
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
+import { Paper, Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 
 class ShowLists extends Component {
     constructor(props) {
@@ -81,7 +11,7 @@ class ShowLists extends Component {
             userMemberships: []
         }
 
-        this.socket = io();
+        this.socket = io('localhost:5000');
 
         this.socket.open();
 
@@ -138,15 +68,23 @@ class ShowLists extends Component {
 
     showUserLists() {
         if(this.state.userLists.length === 0) {
-            return <li>Nothing here...</li>
+            return (
+                <ListItem>
+                    <ListItemText>
+                        Nothing here...
+                    </ListItemText>
+                </ListItem>
+            )
         } else {
             return this.state.userLists.map((list, i) => {
                 return (
-                    <Link to={`/lists/${list.id}`} key={i}>
-                        <li>
-                            {list.name}
-                        </li>
-                    </Link>
+                    <ListItem key={i}>
+                        <ListItemText>
+                            <Link to={`/lists/${list.id}`}>
+                                <Typography variant="display1" align="center" color="primary">{list.name}</Typography>
+                            </Link>
+                        </ListItemText>
+                    </ListItem>
                 )
             })
         }
@@ -154,17 +92,25 @@ class ShowLists extends Component {
 
     showUserMemberships() {
         if(this.state.userMemberships.length === 0) {
-            return <li>Nothing here...</li>
+            return (
+                <ListItem>
+                    <ListItemText>
+                        Nothing here...
+                    </ListItemText>
+                </ListItem>
+            )
         } else {
             let list ;
             return this.state.userMemberships.map((membership, i) => {
                 list = membership.List || membership;
                 return (
-                    <Link to={`/lists/${list.id}`} key={i}>
-                        <li>
-                            {list.name}
-                        </li>
-                    </Link>
+                    <ListItem key={i}>
+                        <ListItemText>
+                            <Link to={`/lists/${list.id}`}>
+                                <Typography variant="display1" align="center" color="primary">{list.name}</Typography>
+                            </Link>
+                        </ListItemText>
+                    </ListItem>
                 )
             })
         }
@@ -172,17 +118,33 @@ class ShowLists extends Component {
 
     render() {
         return (
-            <div>
-                <h1>My Lists</h1>
-                <ul>
-                    {this.showUserLists()}
-                </ul>
-
-                <h1>My Memberships</h1>
-                <ul>
-                    {this.showUserMemberships()}
-                </ul>
-            </div>
+            <Fragment>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography variant="display4" align="center" gutterBottom>Welcome back, {this.props.user.username}!</Typography>
+                        </Paper>
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Paper>
+                            <Typography variant="h2" align="center" gutterBottom>My Lists</Typography>
+                            <List>
+                                {this.showUserLists()}
+                            </List>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper>
+                            <Typography variant="h2" align="center" gutterBottom>My Memberships</Typography>
+                            <List>
+                                {this.showUserMemberships()}
+                            </List>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Fragment>
         )
     }
 }

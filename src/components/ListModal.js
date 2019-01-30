@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import { withAlert } from 'react-alert';
+import { TextField, InputLabel } from '@material-ui/core';
+import './item.css';
 import io from 'socket.io-client';
 
 function getModalStyle() {
@@ -28,6 +30,10 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
+
+    input: {
+        marginBottom: '30px'
+    },
 });
 
 class ListModal extends React.Component {
@@ -40,7 +46,7 @@ class ListModal extends React.Component {
             list: undefined
         };
 
-        this.socket = io();
+        this.socket = io('localhost:5000');
         this.socket.open();
 
     }
@@ -108,7 +114,7 @@ class ListModal extends React.Component {
         const { classes } = this.props;
 
     return (
-        <div>
+        <Fragment>
             {this.renderRedirect()}
             <Button onClick={this.handleOpen} color="inherit">Create New List</Button>
             <Modal
@@ -118,24 +124,26 @@ class ListModal extends React.Component {
                 onClose={this.handleClose}
             >
                 <div style={getModalStyle()} className={classes.paper}>
-                    <Typography variant="h6" id="modal-title">
+                    <Typography variant="headline" id="modal-title" align="center" gutterBottom>
                         Create a New List
                     </Typography>
-                    <Typography variant="subtitle1" id="simple-modal-description">
-                        <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
-                            <label htmlFor="name">Name</label>
-                            <input className="name signupInput"
-                                type="text"
-                                placeholder="Enter a name"
-                                value={this.state.name}
-                                onChange={ (e) => this.handleNameChange(e) }>
-                            </input>
-                            <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
-                        </form>
-                    </Typography>
+                    <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
+                        <InputLabel htmlFor="name">Name</InputLabel>
+                        <TextField className="name itemInput"
+                            type="text"
+                            placeholder="Enter a name"
+                            value={this.state.name}
+                            onChange={ (e) => this.handleNameChange(e) }
+                            InputProps={{
+                                className: classes.input
+                            }}
+                        >
+                        </TextField>
+                        <Button type="submit" fullWidth value="Submit" color="primary" variant="contained">Create List</Button>
+                    </form>
                 </div>
             </Modal>
-        </div>
+        </Fragment>
         );
     }
 }

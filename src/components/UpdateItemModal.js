@@ -1,12 +1,12 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import { withAlert } from 'react-alert';
-import io from 'socket.io-client';
+import { TextField, InputLabel } from '@material-ui/core';
+import './item.css';
 
 function getModalStyle() {
     const top = 50;
@@ -28,6 +28,14 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
+
+    input: {
+        marginBottom: '30px'
+    },
+
+    button: {
+        marginRight: '20px'
+    }
 });
 
 class UpdateItemModal extends React.Component {
@@ -74,10 +82,10 @@ class UpdateItemModal extends React.Component {
         await this.props.handleUpdate(item);
         this.setState({
             open: false,
-            name: '',
-            amount: 0,
-            purchased: false,
-            item: undefined
+            // name: '',
+            // amount: 0,
+            // purchased: false,
+            // item: undefined
         })
     }
 
@@ -101,8 +109,15 @@ class UpdateItemModal extends React.Component {
         const { classes } = this.props;
 
     return (
-        <span>
-            <Button onClick={this.handleOpen} color="inherit">Update</Button>
+        <Fragment>
+            <Button
+                onClick={this.handleOpen}
+                variant="contained"
+                size="small"
+                className={classes.button}
+            >
+                Update
+            </Button>
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
@@ -110,33 +125,40 @@ class UpdateItemModal extends React.Component {
                 onClose={this.handleClose}
             >
                 <div style={getModalStyle()} className={classes.paper}>
-                    <Typography variant="h6" id="modal-title">
-                        Update Item
-                    </Typography>
-                    <Typography variant="subtitle1" id="simple-modal-description">
-                        <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
-                            <label htmlFor="name">Name</label>
-                            <input className="name signupInput"
-                                type="text"
-                                placeholder="Enter a name"
-                                value={this.state.name}
-                                onChange={ (e) => this.handleNameChange(e) }>
-                            </input>
-                            <label htmlFor="amount">Amount</label>
-                            <input className="amount signupInput"
-                                type="number"
-                                step="1"
-                                min="1"
-                                placeholder="Enter the amount"
-                                value={this.state.amount}
-                                onChange={ (e) => this.handleAmountChange(e) }>
-                            </input>
-                            <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
-                        </form>
-                    </Typography>
+                    <Typography variant="headline" align="center" gutterBottom>Update Item</Typography>
+                    <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
+                        <InputLabel htmlFor="name">Name</InputLabel>
+                        <TextField
+                            className="name itemInput"
+                            type="text"
+                            placeholder="Enter a name"
+                            value={this.state.name}
+                            onChange={ (e) => this.handleNameChange(e) }
+                            InputProps={{
+                                className: classes.input
+                            }}
+                        />
+                        <InputLabel htmlFor="amount">Amount</InputLabel>
+                        <TextField
+                            className="amount itemInput"
+                            type="number"
+                            inputProps={{
+                                min: '1',
+                                max: '100',
+                                step: '1',
+                            }}
+                            InputProps={{
+                                className: classes.input
+                            }}
+                            placeholder="Enter the amount"
+                            value={this.state.amount}
+                            onChange={ (e) => this.handleAmountChange(e) }>
+                        </TextField>
+                        <Button type="submit" fullWidth value="Submit" color="primary" variant="contained">Update Item</Button>
+                    </form>
                 </div>
             </Modal>
-        </span>
+        </Fragment>
         );
     }
 }

@@ -1,21 +1,19 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
-// import io from 'socket.io-client';
+import { Grid, Typography, Button } from '@material-ui/core';
 import UpdateItemModal from './UpdateItemModal';
 import { withAlert } from 'react-alert';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const styles = theme => ({
     root: {
         width: '100%',
-        maxWidth: 360,
+        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 });
@@ -46,26 +44,28 @@ class ShowItems extends React.Component {
         if(this.state.items) {
             const { classes } = this.props;
             return (
-                <List className={classes.root}>
-                    {this.props.items.map((item, i) => (
-                        <ListItem key={i} role={undefined} dense button onClick={this.props.handleToggle(item)}>
-                            <Checkbox
-                                checked={item.purchased}
-                                tabIndex={-1}
-                                disableRipple
-                            />
-                            <ListItemText primary={item.name} secondary={item.amount} />
-                            <ListItemSecondaryAction>
-                                <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
-                                <IconButton>
-                                    <form onSubmit={ (e, id) => this.handleDelete(e, item.id) }>
-                                        <input className="handleDelete" type="submit" value="Delete"></input>
-                                    </form>
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    ))}
-                </List>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <List className={classes.root}>
+                            {this.props.items.map((item, i) => (
+                                <ListItem key={i} role={undefined} dense button>
+                                    <Checkbox
+                                        checked={item.purchased}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        onClick={this.props.handleToggle(item)}
+                                    />
+                                    <ListItemText><Typography variant="display2">{item.name}</Typography></ListItemText>
+                                    <ListItemText><Typography variant="display2">{item.amount}</Typography></ListItemText>
+                                    <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
+                                    <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
+                                        <DeleteIcon />
+                                    </Button>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Grid>
+                </Grid>
             )
         }
     }
@@ -74,9 +74,9 @@ class ShowItems extends React.Component {
 
     render() {
         return (
-            <div>
+            <Fragment>
                 {this.itemsTable()}
-            </div>
+            </Fragment>
         )
     }
 }

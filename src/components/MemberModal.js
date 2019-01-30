@@ -1,12 +1,14 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
 import { withAlert } from 'react-alert';
 import io from 'socket.io-client';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { TextField, InputLabel, Button } from '@material-ui/core';
+import './item.css';
 
 function getModalStyle() {
     const top = 50;
@@ -28,6 +30,10 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
+
+    input: {
+        marginBottom: '30px'
+    }
 });
 
 class MemberModal extends React.Component {
@@ -39,7 +45,7 @@ class MemberModal extends React.Component {
             username: ''
         }
 
-        this.socket = io();
+        this.socket = io('localhost:5000');
         this.socket.open();
     };
 
@@ -85,8 +91,10 @@ class MemberModal extends React.Component {
         const { classes } = this.props;
 
     return (
-        <div>
-            <Button onClick={this.handleOpen} color="primary">Add new member</Button>
+        <Fragment>
+            <Fab onClick={this.handleOpen} size="small" color="primary">
+                <AddIcon />
+            </Fab>
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
@@ -94,24 +102,26 @@ class MemberModal extends React.Component {
                 onClose={this.handleClose}
             >
                 <div style={getModalStyle()} className={classes.paper}>
-                    <Typography variant="h6" id="modal-title">
+                    <Typography variant="headline" id="modal-title" gutterBottom align="center">
                         Add a new Member
                     </Typography>
-                    <Typography variant="subtitle1" id="simple-modal-description">
-                        <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
-                            <label htmlFor="username">Name</label>
-                            <input className="username signupInput"
-                                type="text"
-                                placeholder="Enter a username"
-                                value={this.state.name}
-                                onChange={ (e) => this.handleUsernameChange(e) }>
-                            </input>
-                            <input className="handleSubmit signupInput" type="submit" value="Submit"></input>
-                        </form>
-                    </Typography>
+                    <form className="signupForm" onSubmit={ (e) => this.handleSubmit(e) }>
+                        <InputLabel htmlFor="username">Name</InputLabel>
+                        <TextField
+                            className="username itemInput"
+                            type="text"
+                            placeholder="Enter a username"
+                            value={this.state.name}
+                            InputProps={{
+                                className: classes.input
+                            }}
+                            onChange={ (e) => this.handleUsernameChange(e) }>
+                        </TextField>
+                        <Button type="submit" fullWidth value="Submit" color="primary" variant="contained">Add Member</Button>
+                    </form>
                 </div>
             </Modal>
-        </div>
+        </Fragment>
         );
     }
 }
