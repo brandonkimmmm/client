@@ -1,8 +1,58 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import './landing.css';
 import ShowLists from './ShowLists';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+    icon: {
+        marginRight: theme.spacing.unit * 2,
+    },
+    heroUnit: {
+        backgroundColor: theme.palette.background.paper,
+    },
+    heroContent: {
+        maxWidth: 600,
+        margin: '0 auto',
+        padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+    },
+    heroButtons: {
+        marginTop: theme.spacing.unit * 4,
+    },
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+            width: 1100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    cardGrid: {
+        padding: `${theme.spacing.unit * 8}px 0`,
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+});
 
 class Landing extends Component {
     constructor(props) {
@@ -27,35 +77,88 @@ class Landing extends Component {
     }
 
     showLanding() {
+        const { classes } = this.props;
         if(!this.props.user) {
             return (
-                <section className='landing'>
-                    <section className="mainSection">
-                        <h1>Welcome to Grocery List!</h1>
-                        <h4>Sign-up for a new account</h4>
-                        <Button component={ Link } to="/user/signup" variant="contained" color="primary">
-                            Sign up
-                        </Button>
-                    </section>
-                    <section className="selling-points">
-                        <h1>Grocery list give you the ability to share a list with anyone -- from todo lists to grocery shopping, collaborate with others to get something done.</h1>
-                        <div className="point">
-                            <img src="https://static.adweek.com/adweek.com-prod/wp-content/uploads/sites/2/2016/04/twitter-list.jpg" alt="Create" />
-                            <h2 className="point-title">Create</h2>
-                            <p className="point-description">Create a list where you can add, check off, and remove items.</p>
+                <Fragment>
+                    <CssBaseline />
+                    <main>
+                        <div className={classes.heroUnit}>
+                            <div className={classes.heroContent}>
+                                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                    Welcome to Grocery List!
+                                </Typography>
+                                <Typography variant="h6" align="center" color="textSecondary">
+                                    Sign up for a new account to start collaborating in real-time!
+                                </Typography>
+                            </div>
+                            <div className={classes.heroButtons}>
+                                <Grid container justify="center">
+                                    <Grid item>
+                                        <Button component={ Link } to="/user/signup" variant="contained" color="primary">
+                                            Sign up
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
                         </div>
-                        <div className="point">
-                            <img src="https://www.barco.com/~/media/images/products/a%20-%20d/clickshare/meeting%20room%20shots/meetingroom_2625%20projection_s%20jpg.jpg?mw=700&mh=456" alt="Collaborate"/>
-                            <h2 className="point-title">Collaborate</h2>
-                            <p className="point-description">Share your list with other users so they can add, check off, and remove items as well.</p>
+                        <div className={classNames(classes.layout, classes.cardGrid)}>
+                            <Grid container spacing={40}>
+                                <Grid item sm={4}>
+                                    <Card classname={classes.card}>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image="https://static.adweek.com/adweek.com-prod/wp-content/uploads/sites/2/2016/04/twitter-list.jpg"
+                                            title="Create"
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                Create
+                                            </Typography>
+                                            <Typography>
+                                                Create lists where you can add, check off, update, and remove items.
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item sm={4}>
+                                    <Card classname={classes.card}>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image="https://www.barco.com/~/media/images/products/a%20-%20d/clickshare/meeting%20room%20shots/meetingroom_2625%20projection_s%20jpg.jpg?mw=700&mh=456"
+                                            title="Collaborate"
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                Collaborate
+                                            </Typography>
+                                            <Typography>
+                                                Add members to or become members of lists so you can collaborate on a variety of lists.
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item sm={4}>
+                                    <Card classname={classes.card}>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVgxU5yfn91Kxu4xVN7fJRp8wlg7joSNQjsPwft0nJaYNSwEb"
+                                            title="Real-time"
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                Real-Time
+                                            </Typography>
+                                            <Typography>
+                                                Be updated on what members accomplish, add, or delete to a list as they happen.
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
                         </div>
-                        <div className="point">
-                            <img src="http://www.healthcare-informatics.com/sites/healthcare-informatics.com/files/imagecache/570x360/CircleOfCoordination_14989377_SMALLER.jpg" alt="Coordinate" />
-                            <h2 className="point-title">Coordinate</h2>
-                            <p className="point-description">Use your list to accomplish goals with your group members efficiently and effectively.</p>
-                        </div>
-                    </section>
-                </section>
+                    </main>
+                </Fragment>
             )
         } else {
             return (
@@ -66,11 +169,15 @@ class Landing extends Component {
 
     render() {
         return (
-            <div>
+            <Fragment>
                 {this.showLanding()}
-            </div>
+            </Fragment>
         )
     }
 }
 
-export default Landing;
+Landing.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Landing);
