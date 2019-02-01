@@ -13,8 +13,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const styles = theme => ({
     root: {
         width: '100%',
-        maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
+        maxHeight: '500px',
+        height: '500px',
+        overflow: 'auto'
     },
 });
 
@@ -44,28 +46,24 @@ class ShowItems extends React.Component {
         if(this.state.items) {
             const { classes } = this.props;
             return (
-                <Grid container>
-                    <Grid item xs={12}>
-                        <List className={classes.root}>
-                            {this.props.items.map((item, i) => (
-                                <ListItem key={i} role={undefined} dense button>
-                                    <Checkbox
-                                        checked={item.purchased}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        onClick={this.props.handleToggle(item)}
-                                    />
-                                    <ListItemText><Typography variant="h5">{item.name}</Typography></ListItemText>
-                                    <ListItemText><Typography variant="h5">{item.amount}</Typography></ListItemText>
-                                    <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
-                                    <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
-                                        <DeleteIcon />
-                                    </Button>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Grid>
-                </Grid>
+                <List className={classes.root}>
+                    {this.props.items.map((item, i) => (
+                        <ListItem key={i} role={undefined} dense button>
+                            <Checkbox
+                                checked={item.purchased}
+                                tabIndex={-1}
+                                disableRipple
+                                onClick={this.props.handleToggle(item)}
+                            />
+                            <ListItemText><Typography variant="h5">{item.name}</Typography></ListItemText>
+                            <ListItemText><Typography variant="h5">{item.amount}</Typography></ListItemText>
+                            <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
+                            <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
+                                <DeleteIcon />
+                            </Button>
+                        </ListItem>
+                    ))}
+                </List>
             )
         }
     }

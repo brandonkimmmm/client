@@ -10,6 +10,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import './list.css';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import classNames from 'classnames';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const styles = theme => ({
     heroUnit: {
@@ -27,13 +31,29 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
         [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-            width: 1100,
+            width: '90%',
             marginLeft: 'auto',
             marginRight: 'auto',
         },
     },
-    title: {
-        marginBottom: '10px'
+    cardGrid: {
+        padding: `${theme.spacing.unit * 8}px 0`,
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+    table: {
+        maxHeight: '500px',
+        height: '500px',
+        overflow: 'auto'
     }
 });
 
@@ -173,7 +193,56 @@ class List extends Component {
                                 </Grid>
                             </div>
                         </div>
-                        <Grid container>
+                        <div className={classNames(classes.layout, classes.cardGrid)}>
+                            <Grid container spacing={40}>
+                                <Grid item xs={12} sm={8}>
+                                    <Card classname={classes.card}>
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                Items
+                                            </Typography>
+                                            <Items list={this.state.list} user={this.props.user}/>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Card classname={classes.card}>
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                Members
+                                            </Typography>
+                                            <MemberModal list={this.state.list} />
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Username</TableCell>
+                                                        {/* <TableCell>Email</TableCell> */}
+                                                        <TableCell></TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {this.state.members.map((member, i) => {
+                                                        return (
+                                                            <TableRow key={i}>
+                                                                <TableCell>{member.User.username}</TableCell>
+                                                                {/* <TableCell>{member.User.email}</TableCell> */}
+                                                                <TableCell>
+                                                                    <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                                        <DeleteIcon />
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                        </div>
+
+                        {/* <Grid container>
                             <Grid item xs={8}>
                                 <Typography variant="h2" align="center">Items</Typography>
                                 <br></br>
@@ -209,7 +278,7 @@ class List extends Component {
                                     </TableBody>
                                 </Table>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                     </main>
                 )
             } else {
@@ -228,7 +297,49 @@ class List extends Component {
                                 </Grid>
                             </div>
                         </div>
-                        <Grid container spacing={16} justify="center">
+                        <div className={classNames(classes.layout, classes.cardGrid)}>
+                            <Grid container spacing={40}>
+                                <Grid item xs={12} sm={8}>
+                                    <Card classname={classes.card}>
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                Items
+                                            </Typography>
+                                            <Items list={this.state.list} user={this.props.user}/>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Card classname={classes.card}>
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                Members
+                                            </Typography>
+                                            <Table className={classes.table}>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Username</TableCell>
+                                                        {/* <TableCell>Email</TableCell> */}
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {this.state.members.map((member, i) => {
+                                                        return (
+                                                            <TableRow key={i}>
+                                                                <TableCell>{member.User.username}</TableCell>
+                                                                {/* <TableCell>{member.User.email}</TableCell> */}
+                                                            </TableRow>
+                                                        )
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                        </div>
+
+                        {/* <Grid container spacing={16} justify="center">
                             <Grid item xs={7}>
                                 <Typography variant="h2" align="center" className={classes.title}>Items</Typography>
                                 <Items list={this.state.list} user={this.props.user}/>
@@ -256,7 +367,7 @@ class List extends Component {
                                     </TableBody>
                                 </Table>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                     </main>
                 )
             }
