@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const styles = theme => ({
     root: {
         width: '100%',
-        // maxWidth: 360,
+        maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 });
@@ -55,8 +55,8 @@ class ShowItems extends React.Component {
                                         disableRipple
                                         onClick={this.props.handleToggle(item)}
                                     />
-                                    <ListItemText><Typography variant="display2">{item.name}</Typography></ListItemText>
-                                    <ListItemText><Typography variant="display2">{item.amount}</Typography></ListItemText>
+                                    <ListItemText><Typography variant="h5">{item.name}</Typography></ListItemText>
+                                    <ListItemText><Typography variant="h5">{item.amount}</Typography></ListItemText>
                                     <UpdateItemModal item={item} handleUpdate={(item) => this.props.handleUpdate(item)}/>
                                     <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
                                         <DeleteIcon />

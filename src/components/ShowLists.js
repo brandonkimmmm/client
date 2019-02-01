@@ -1,17 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Paper, Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import ListModal from './ListModal.js'
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import classNames from 'classnames';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const styles = theme => ({
     heroUnit: {
         backgroundColor: theme.palette.background.paper,
-        paddingBottom: '40px'
+        paddingBottom: '40px',
+        marginBottom: '50px'
     },
     heroContent: {
         maxWidth: 600,
@@ -28,6 +32,25 @@ const styles = theme => ({
             marginRight: 'auto',
         },
     },
+    cardGrid: {
+        padding: `${theme.spacing.unit * 8}px 0`,
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+    list: {
+        maxHeight: '350px',
+        minHeight: '350px',
+        overflow: 'auto'
+    }
 });
 
 class ShowLists extends Component {
@@ -98,7 +121,7 @@ class ShowLists extends Component {
             return (
                 <ListItem>
                     <ListItemText>
-                        Nothing here...
+                        <Typography variant="h6" align="center" color="inherit">Nothing here...</Typography>
                     </ListItemText>
                 </ListItem>
             )
@@ -108,7 +131,7 @@ class ShowLists extends Component {
                     <ListItem key={i}>
                         <ListItemText>
                             <Link to={`/lists/${list.id}`}>
-                                <Typography variant="display1" align="center" color="primary">{list.name}</Typography>
+                                <Typography variant="h6" align="center" color="inherit">{list.name}</Typography>
                             </Link>
                         </ListItemText>
                     </ListItem>
@@ -122,7 +145,7 @@ class ShowLists extends Component {
             return (
                 <ListItem>
                     <ListItemText>
-                        Nothing here...
+                        <Typography variant="h6" align="center" color="inherit">Nothing here...</Typography>
                     </ListItemText>
                 </ListItem>
             )
@@ -134,7 +157,7 @@ class ShowLists extends Component {
                     <ListItem key={i}>
                         <ListItemText>
                             <Link to={`/lists/${list.id}`}>
-                                <Typography variant="display1" align="center" color="primary">{list.name}</Typography>
+                                <Typography variant="h6" align="center" color="inherit">{list.name}</Typography>
                             </Link>
                         </ListItemText>
                     </ListItem>
@@ -153,7 +176,7 @@ class ShowLists extends Component {
                     <div className={classes.heroUnit}>
                         <div className={classes.heroContent}>
                             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                                Welcome, {this.props.user.username} !
+                                Welcome, {this.props.user.username}!
                             </Typography>
                             <Grid container spacing={16} justify="center">
                                 <Grid item>
@@ -163,34 +186,45 @@ class ShowLists extends Component {
                                 </Grid>
                             </Grid>
                         </div>
-                        {/* <div className={classes.heroButtons}>
-                            <Grid container spacing={16} justify="center">
-                                <Grid item>
-                                    <Button component={ Link } to="/user/signup" variant="contained" color="primary">
-                                        Sign up
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </div> */}
                     </div>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Paper>
-                                <Typography variant="h2" align="center" gutterBottom>My Lists</Typography>
-                                <List>
-                                    {this.showUserLists()}
-                                </List>
-                            </Paper>
+                    <div className={classNames(classes.layout, classes.cardGrid)}>
+                        <Grid container spacing={40}>
+                            <Grid item xs={12} sm={6}>
+                                <Card classname={classes.card}>
+                                    <CardMedia
+                                        className={classes.cardMedia}
+                                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVgxU5yfn91Kxu4xVN7fJRp8wlg7joSNQjsPwft0nJaYNSwEb"
+                                        title="Real-time"
+                                    />
+                                    <CardContent className={classes.cardContent}>
+                                        <Typography gutterBottom variant="h4" align="center" component="h2">
+                                            My Lists
+                                        </Typography>
+                                        <List className={classes.list}>
+                                            {this.showUserLists()}
+                                        </List>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Card classname={classes.card}>
+                                    <CardMedia
+                                        className={classes.cardMedia}
+                                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVgxU5yfn91Kxu4xVN7fJRp8wlg7joSNQjsPwft0nJaYNSwEb"
+                                        title="Real-time"
+                                    />
+                                    <CardContent className={classes.cardContent}>
+                                        <Typography gutterBottom variant="h4" align="center" component="h2">
+                                            Memberships
+                                        </Typography>
+                                        <List className={classes.list}>
+                                            {this.showUserMemberships()}
+                                        </List>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Paper>
-                                <Typography variant="h2" align="center" gutterBottom>My Memberships</Typography>
-                                <List>
-                                    {this.showUserMemberships()}
-                                </List>
-                            </Paper>
-                        </Grid>
-                    </Grid>
+                    </div>
                 </main>
             </Fragment>
         )

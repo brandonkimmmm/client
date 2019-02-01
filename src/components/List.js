@@ -6,7 +6,36 @@ import Items from './Items';
 import io from 'socket.io-client';
 import { Button, Paper, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import './list.css';
+
+const styles = theme => ({
+    heroUnit: {
+        backgroundColor: theme.palette.background.paper,
+        paddingBottom: '40px',
+        marginBottom: '50px'
+    },
+    heroContent: {
+        maxWidth: 600,
+        margin: '0 auto',
+        padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+    },
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+            width: 1100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    title: {
+        marginBottom: '10px'
+    }
+});
 
 class List extends Component {
     constructor(props) {
@@ -125,122 +154,120 @@ class List extends Component {
     }
 
     showList = () => {
+        const { classes } = this.props;
+
         if(this.state.list) {
             if(this.props.user && this.state.list.userId === this.props.user.id) {
                 return(
-                    <Fragment>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Paper className="list-heading">
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <Typography className="list-title" variant="h1" align="center">{this.state.list.name}</Typography>
-                                            <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
-                                            <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
-                                        </Grid>
+                    <main>
+                        <div className={classes.heroUnit}>
+                            <div className={classes.heroContent}>
+                                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                    {this.state.list.name}
+                                </Typography>
+                                <Grid container spacing={16} justify="center">
+                                    <Grid item>
+                                        <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                        <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
                                     </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grid>
+                                </Grid>
+                            </div>
+                        </div>
                         <Grid container>
                             <Grid item xs={8}>
-                                <Paper>
-                                    <Typography variant="h2" align="center">Items</Typography>
-                                    <br></br>
-                                    <Items list={this.state.list} user={this.props.user}/>
-                                </Paper>
+                                <Typography variant="h2" align="center">Items</Typography>
+                                <br></br>
+                                <Items list={this.state.list} user={this.props.user}/>
                             </Grid>
                             <Grid item xs={4}>
-                                <Paper>
-                                    <Typography variant="h2" align="center">
-                                        Members
-                                        <br></br>
-                                        <MemberModal list={this.state.list} />
-                                    </Typography>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Username</TableCell>
-                                                <TableCell>Email</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {this.state.members.map((member, i) => {
-                                                return (
-                                                    <TableRow key={i}>
-                                                        <TableCell>{member.User.username}</TableCell>
-                                                        <TableCell>{member.User.email}</TableCell>
-                                                        <TableCell>
-                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
-                                                                <DeleteIcon />
-                                                            </Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            })}
-                                        </TableBody>
-                                    </Table>
-                                </Paper>
+                                <Typography variant="h2" align="center">
+                                    Members
+                                    <br></br>
+                                    <MemberModal list={this.state.list} />
+                                </Typography>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Username</TableCell>
+                                            <TableCell>Email</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {this.state.members.map((member, i) => {
+                                            return (
+                                                <TableRow key={i}>
+                                                    <TableCell>{member.User.username}</TableCell>
+                                                    <TableCell>{member.User.email}</TableCell>
+                                                    <TableCell>
+                                                        <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
                             </Grid>
                         </Grid>
-                    </Fragment>
+                    </main>
                 )
             } else {
                 return(
-                    <Fragment>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Paper className="list-heading">
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <Typography className="list-title" variant="h1" align="center">{this.state.list.name}</Typography>
-                                            <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
-                                            <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
-                                        </Grid>
+                    <main>
+                        <div className={classes.heroUnit}>
+                            <div className={classes.heroContent}>
+                                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                    {this.state.list.name}
+                                </Typography>
+                                <Grid container spacing={16} justify="center">
+                                    <Grid item>
+                                        <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                        <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
                                     </Grid>
-                                </Paper>
+                                </Grid>
+                            </div>
+                        </div>
+                        <Grid container spacing={16} justify="center">
+                            <Grid item xs={7}>
+                                <Typography variant="h2" align="center" className={classes.title}>Items</Typography>
+                                <Items list={this.state.list} user={this.props.user}/>
                             </Grid>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={8}>
-                                <Paper>
-                                    <Typography variant="h2" align="center">Items</Typography>
-                                    <Items list={this.state.list} user={this.props.user}/>
-                                </Paper>
+                            <Grid item xs={.5}>
                             </Grid>
                             <Grid item xs={4}>
-                                <Paper>
-                                    <Typography variant="h2" align="center">Members</Typography>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Username</TableCell>
-                                                <TableCell>Email</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {this.state.members.map((member, i) => {
-                                                return (
-                                                    <TableRow key={i}>
-                                                        <TableCell>{member.User.username}</TableCell>
-                                                        <TableCell>{member.User.email}</TableCell>
-                                                    </TableRow>
-                                                )
-                                            })}
-                                        </TableBody>
-                                    </Table>
-                                </Paper>
+                                <Typography variant="h2" align="center" className={classes.title}>Members</Typography>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Username</TableCell>
+                                            <TableCell>Email</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {this.state.members.map((member, i) => {
+                                            return (
+                                                <TableRow key={i}>
+                                                    <TableCell>{member.User.username}</TableCell>
+                                                    <TableCell>{member.User.email}</TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
                             </Grid>
                         </Grid>
-                    </Fragment>
+                    </main>
                 )
             }
         }
     }
 
     render() {
+
         return (
             <Fragment>
+                <CssBaseline />
                 {this.renderRedirect()}
                 {this.showList(this.showList.bind(this))}
             </Fragment>
@@ -248,4 +275,8 @@ class List extends Component {
     }
 }
 
-export default withAlert(List);
+List.PropTypes = {
+    classes: PropTypes.object.isRequired
+}
+
+export default withAlert(withStyles(styles)(List));

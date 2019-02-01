@@ -99,9 +99,6 @@ class ButtonAppBar extends Component {
                         <Button component={ Link } to="/" color="inherit" className={classes.button}>
                             Lists
                         </Button>
-                        <ListModal
-                            user={this.props.user}
-                        />
                         <Button type="submit" color="secondary" variant="contained" onClick={ (e) => this.handleSubmit(e)}>
                             Sign out
                         </Button>
