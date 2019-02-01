@@ -19,6 +19,7 @@ const styles = theme => ({
     },
     heroUnit: {
         backgroundColor: theme.palette.background.paper,
+        paddingBottom: '40px'
     },
     heroContent: {
         maxWidth: 600,
@@ -89,11 +90,11 @@ class Landing extends Component {
                                     Welcome to Grocery List!
                                 </Typography>
                                 <Typography variant="h6" align="center" color="textSecondary">
-                                    Sign up for a new account to start collaborating in real-time!
+                                    An app that allows you to create and modify different types of to-do lists. Collaborate and coordinate with other users using our real-time app to finish tasks from gorcery shopping to daily chores. Sign up today to get started!
                                 </Typography>
                             </div>
                             <div className={classes.heroButtons}>
-                                <Grid container justify="center">
+                                <Grid container spacing={16} justify="center">
                                     <Grid item>
                                         <Button component={ Link } to="/user/signup" variant="contained" color="primary">
                                             Sign up

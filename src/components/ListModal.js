@@ -116,7 +116,7 @@ class ListModal extends React.Component {
     return (
         <Fragment>
             {this.renderRedirect()}
-            <Button onClick={this.handleOpen} color="inherit">Create New List</Button>
+            <Button onClick={this.handleOpen} color="primary" variant="contained">Create New List</Button>
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"

@@ -2,6 +2,33 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Paper, Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import ListModal from './ListModal.js'
+
+const styles = theme => ({
+    heroUnit: {
+        backgroundColor: theme.palette.background.paper,
+        paddingBottom: '40px'
+    },
+    heroContent: {
+        maxWidth: 600,
+        margin: '0 auto',
+        padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+    },
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+            width: 1100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+});
 
 class ShowLists extends Component {
     constructor(props) {
@@ -117,36 +144,61 @@ class ShowLists extends Component {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
             <Fragment>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Typography variant="display4" align="center" gutterBottom>Welcome back, {this.props.user.username}!</Typography>
-                        </Paper>
+                <CssBaseline />
+                <main>
+                    <div className={classes.heroUnit}>
+                        <div className={classes.heroContent}>
+                            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                Welcome, {this.props.user.username} !
+                            </Typography>
+                            <Grid container spacing={16} justify="center">
+                                <Grid item>
+                                    <ListModal
+                                        user={this.props.user}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </div>
+                        {/* <div className={classes.heroButtons}>
+                            <Grid container spacing={16} justify="center">
+                                <Grid item>
+                                    <Button component={ Link } to="/user/signup" variant="contained" color="primary">
+                                        Sign up
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </div> */}
+                    </div>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <Paper>
+                                <Typography variant="h2" align="center" gutterBottom>My Lists</Typography>
+                                <List>
+                                    {this.showUserLists()}
+                                </List>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper>
+                                <Typography variant="h2" align="center" gutterBottom>My Memberships</Typography>
+                                <List>
+                                    {this.showUserMemberships()}
+                                </List>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Paper>
-                            <Typography variant="h2" align="center" gutterBottom>My Lists</Typography>
-                            <List>
-                                {this.showUserLists()}
-                            </List>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Paper>
-                            <Typography variant="h2" align="center" gutterBottom>My Memberships</Typography>
-                            <List>
-                                {this.showUserMemberships()}
-                            </List>
-                        </Paper>
-                    </Grid>
-                </Grid>
+                </main>
             </Fragment>
         )
     }
 }
 
-export default ShowLists;
+ShowLists.propTypes = {
+    classes: PropTypes.object.isRequired,
+}
+
+export default withStyles(styles)(ShowLists);
