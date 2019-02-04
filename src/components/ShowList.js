@@ -4,7 +4,7 @@ import { withAlert } from 'react-alert';
 import MemberModal from './MemberModal';
 import Items from './Items';
 import io from 'socket.io-client';
-import { Button, Paper, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, ListItemText } from '@material-ui/core';
+import { Button, Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -13,7 +13,7 @@ import './list.css';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import classNames from 'classnames';
-import CardMedia from '@material-ui/core/CardMedia';
+import NewItemModal from './NewItemModal';
 
 const styles = theme => ({
     heroUnit: {
@@ -54,6 +54,9 @@ const styles = theme => ({
         maxHeight: '300px',
         height: '300px',
         overflow: 'auto'
+    },
+    buttons: {
+        marginTop: '30px'
     }
 });
 
@@ -177,120 +180,115 @@ class ShowList extends Component {
         const { classes } = this.props;
 
         if(this.state.list) {
-            if(this.props.user && this.state.list.userId === this.props.user.id) {
-                return(
-                    <main>
-                        <div className={classes.heroUnit}>
-                            <div className={classes.heroContent}>
-                                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                                    {this.state.list.name}
-                                </Typography>
-                                <Grid container spacing={16} justify="center">
-                                    <Grid item>
-                                        <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
-                                        <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
+            if(this.props.user) {
+                if (this.state.list.userId === this.props.user.id) {
+                    return (
+                        <main>
+                            <div className={classes.heroUnit}>
+                                <div className={classes.heroContent}>
+                                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                        {this.state.list.name}
+                                    </Typography>
+                                    <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                    <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
+                                    <Grid container spacing={16} justify="center" className={classes.buttons}>
+                                        <Grid item>
+                                            <NewItemModal list={this.state.list} userId={this.props.user.id} />
+                                        </Grid>
+                                        <Grid item>
+                                            <MemberModal list={this.state.list} />
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
+                            <div className={classNames(classes.layout, classes.cardGrid)}>
+                                <Grid container spacing={40}>
+                                    <Grid item xs={12} sm={8}>
+                                        <Card classname={classes.card}>
+                                            <CardContent className={classes.cardContent}>
+                                                <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                    Items
+                                                </Typography>
+                                                <Items list={this.state.list} user={this.props.user}/>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4}>
+                                        <Card classname={classes.card}>
+                                            <CardContent className={classes.cardContent}>
+                                                <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                    Members
+                                                </Typography>
+                                                <List className={classes.list}>
+                                                    {this.state.members.map((member, i) => (
+                                                        <ListItem key={i} role={undefined} dense button>
+                                                            <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
+                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                                <DeleteIcon />
+                                                            </Button>
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            </CardContent>
+                                        </Card>
                                     </Grid>
                                 </Grid>
                             </div>
-                        </div>
-                        <div className={classNames(classes.layout, classes.cardGrid)}>
-                            <Grid container spacing={40}>
-                                <Grid item xs={12} sm={8}>
-                                    <Card classname={classes.card}>
-                                        <CardContent className={classes.cardContent}>
-                                            <Typography gutterBottom variant="h4" align="center" component="h2">
-                                                Items
-                                            </Typography>
-                                            <Items list={this.state.list} user={this.props.user}/>
-                                        </CardContent>
-                                    </Card>
+                        </main>
+                    )
+                } else {
+                    return(
+                        <main>
+                            <div className={classes.heroUnit}>
+                                <div className={classes.heroContent}>
+                                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                                        {this.state.list.name}
+                                    </Typography>
+                                    <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
+                                    <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
+                                    <Grid container spacing={16} justify="center" className={classes.buttons}>
+                                        <Grid item>
+                                            <NewItemModal list={this.state.list} userId={this.props.user.id} />
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
+                            <div className={classNames(classes.layout, classes.cardGrid)}>
+                                <Grid container spacing={40}>
+                                    <Grid item xs={12} sm={8}>
+                                        <Card classname={classes.card}>
+                                            <CardContent className={classes.cardContent}>
+                                                <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                    Items
+                                                </Typography>
+                                                <Items list={this.state.list} user={this.props.user}/>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4}>
+                                        <Card classname={classes.card}>
+                                            <CardContent className={classes.cardContent}>
+                                                <Typography gutterBottom variant="h4" align="center" component="h2">
+                                                    Members
+                                                </Typography>
+                                                <List className={classes.list}>
+                                                    {this.state.members.map((member, i) => (
+                                                        <ListItem key={i} role={undefined} dense button>
+                                                            <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
+                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                                <DeleteIcon />
+                                                            </Button>
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <Card classname={classes.card}>
-                                        <CardContent className={classes.cardContent}>
-                                            <Typography gutterBottom variant="h4" align="center" component="h2">
-                                                Members
-                                            </Typography>
-                                            <MemberModal list={this.state.list} />
-                                            {/* <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>Username</TableCell>
-                                                        <TableCell>Email</TableCell>
-                                                        <TableCell></TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {this.state.members.map((member, i) => {
-                                                        return (
-                                                            <TableRow key={i}>
-                                                                <TableCell>{member.User.username}</TableCell>
-                                                                <TableCell>{member.User.email}</TableCell>
-                                                                <TableCell>
-                                                                    <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
-                                                                        <DeleteIcon />
-                                                                    </Button>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })}
-                                                </TableBody>
-                                            </Table> */}
-                                            <List className={classes.list}>
-                                                {this.state.members.map((member, i) => (
-                                                    <ListItem key={i} role={undefined} dense button>
-                                                        <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
-                                                        <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
-                                                            <DeleteIcon />
-                                                        </Button>
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </Grid>
-                        </div>
-
-                        {/* <Grid container>
-                            <Grid item xs={8}>
-                                <Typography variant="h2" align="center">Items</Typography>
-                                <br></br>
-                                <Items list={this.state.list} user={this.props.user}/>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h2" align="center">
-                                    Members
-                                    <br></br>
-                                    <MemberModal list={this.state.list} />
-                                </Typography>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Username</TableCell>
-                                            <TableCell>Email</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {this.state.members.map((member, i) => {
-                                            return (
-                                                <TableRow key={i}>
-                                                    <TableCell>{member.User.username}</TableCell>
-                                                    <TableCell>{member.User.email}</TableCell>
-                                                    <TableCell>
-                                                        <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
-                                                            <DeleteIcon />
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            )
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </Grid>
-                        </Grid> */}
-                    </main>
-                )
+                            </div>
+                        </main>
+                    )
+                }
             } else {
                 return(
                     <main>
@@ -325,31 +323,10 @@ class ShowList extends Component {
                                             <Typography gutterBottom variant="h4" align="center" component="h2">
                                                 Members
                                             </Typography>
-                                            {/* <Table className={classes.table}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>Username</TableCell>
-                                                        <TableCell>Email</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {this.state.members.map((member, i) => {
-                                                        return (
-                                                            <TableRow key={i}>
-                                                                <TableCell>{member.User.username}</TableCell>
-                                                                <TableCell>{member.User.email}</TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })}
-                                                </TableBody>
-                                            </Table> */}
                                             <List className={classes.list}>
                                                 {this.state.members.map((member, i) => (
                                                     <ListItem key={i} role={undefined} dense button>
                                                         <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
-                                                        {/* <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
-                                                            <DeleteIcon />
-                                                        </Button> */}
                                                     </ListItem>
                                                 ))}
                                             </List>
@@ -358,36 +335,6 @@ class ShowList extends Component {
                                 </Grid>
                             </Grid>
                         </div>
-
-                        {/* <Grid container spacing={16} justify="center">
-                            <Grid item xs={7}>
-                                <Typography variant="h2" align="center" className={classes.title}>Items</Typography>
-                                <Items list={this.state.list} user={this.props.user}/>
-                            </Grid>
-                            <Grid item xs={.5}>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h2" align="center" className={classes.title}>Members</Typography>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Username</TableCell>
-                                            <TableCell>Email</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {this.state.members.map((member, i) => {
-                                            return (
-                                                <TableRow key={i}>
-                                                    <TableCell>{member.User.username}</TableCell>
-                                                    <TableCell>{member.User.email}</TableCell>
-                                                </TableRow>
-                                            )
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </Grid>
-                        </Grid> */}
                     </main>
                 )
             }

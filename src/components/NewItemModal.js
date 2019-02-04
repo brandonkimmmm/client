@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import { withAlert } from 'react-alert';
 import io from 'socket.io-client';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, InputLabel, Button } from '@material-ui/core';
 import './item.css';
@@ -109,10 +108,10 @@ class NewItemModal extends React.Component {
 
     return (
         <Fragment>
-            <Typography align="center">
-                <Fab size="small" onClick={this.handleOpen} color="primary">
-                    <AddIcon />
-                </Fab>
+            <Typography>
+                <Button onClick={this.handleOpen} color="primary" variant="contained">
+                    <AddIcon /> Item
+                </Button>
             </Typography>
             <Modal
                 aria-labelledby="simple-modal-title"

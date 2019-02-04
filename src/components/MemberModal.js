@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import { withAlert } from 'react-alert';
 import io from 'socket.io-client';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, InputLabel, Button } from '@material-ui/core';
 import './item.css';
@@ -92,9 +91,9 @@ class MemberModal extends React.Component {
 
     return (
         <Fragment>
-            <Fab onClick={this.handleOpen} size="small" color="primary">
-                <AddIcon />
-            </Fab>
+            <Button onClick={this.handleOpen} color="primary" variant="contained">
+                <AddIcon /> Member
+            </Button>
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"

@@ -193,7 +193,7 @@ class ShowLists extends Component {
                                 <Card classname={classes.card}>
                                     <CardMedia
                                         className={classes.cardMedia}
-                                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVgxU5yfn91Kxu4xVN7fJRp8wlg7joSNQjsPwft0nJaYNSwEb"
+                                        image="https://www.growthengineering.co.uk/wp-content/uploads/2014/07/To-Do-List.png"
                                         title="Real-time"
                                     />
                                     <CardContent className={classes.cardContent}>
@@ -210,7 +210,7 @@ class ShowLists extends Component {
                                 <Card classname={classes.card}>
                                     <CardMedia
                                         className={classes.cardMedia}
-                                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVgxU5yfn91Kxu4xVN7fJRp8wlg7joSNQjsPwft0nJaYNSwEb"
+                                        image="https://seventhqueen.com/support/wp-content/uploads/2016/05/Paid-Memberships-Pro_1500x1500.jpg"
                                         title="Real-time"
                                     />
                                     <CardContent className={classes.cardContent}>

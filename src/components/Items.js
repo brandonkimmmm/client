@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import io from 'socket.io-client';
 import { withAlert } from 'react-alert';
 import ShowItems from './ShowItems';
-import NewItemModal from './NewItemModal';
+// import NewItemModal from './NewItemModal';
 
 class Items extends Component {
     constructor(props) {
@@ -195,19 +195,19 @@ class Items extends Component {
         }
     }
 
-    showNewItemButton() {
-        if(this.props.user) {
-            return <NewItemModal
-                    list={this.props.list}
-                    userId={this.props.user.id}
-                />
-        }
-    }
+    // showNewItemButton() {
+    //     if(this.props.user) {
+    //         return <NewItemModal
+    //                 list={this.props.list}
+    //                 userId={this.props.user.id}
+    //             />
+    //     }
+    // }
 
     render() {
         return (
             <Fragment>
-                {this.showNewItemButton()}
+                {/* {this.showNewItemButton()} */}
                 <ShowItems list={this.props.list} user={this.props.user} items={this.state.items} handleUpdate={((item) => this.handleUpdate(item))} handleToggle={(item) => this.handleToggle(item)} handleDelete={(id) => this.handleDelete(id)}/>
             </Fragment>
         )
