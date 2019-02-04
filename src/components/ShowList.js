@@ -4,7 +4,7 @@ import { withAlert } from 'react-alert';
 import MemberModal from './MemberModal';
 import Items from './Items';
 import io from 'socket.io-client';
-import { Button, Paper, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Button, Paper, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, ListItemText } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -50,14 +50,14 @@ const styles = theme => ({
     cardContent: {
         flexGrow: 1,
     },
-    table: {
-        maxHeight: '500px',
-        height: '500px',
+    list: {
+        maxHeight: '300px',
+        height: '300px',
         overflow: 'auto'
     }
 });
 
-class List extends Component {
+class ShowList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -212,11 +212,11 @@ class List extends Component {
                                                 Members
                                             </Typography>
                                             <MemberModal list={this.state.list} />
-                                            <Table>
+                                            {/* <Table>
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>Username</TableCell>
-                                                        {/* <TableCell>Email</TableCell> */}
+                                                        <TableCell>Email</TableCell>
                                                         <TableCell></TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -225,7 +225,7 @@ class List extends Component {
                                                         return (
                                                             <TableRow key={i}>
                                                                 <TableCell>{member.User.username}</TableCell>
-                                                                {/* <TableCell>{member.User.email}</TableCell> */}
+                                                                <TableCell>{member.User.email}</TableCell>
                                                                 <TableCell>
                                                                     <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
                                                                         <DeleteIcon />
@@ -235,7 +235,17 @@ class List extends Component {
                                                         )
                                                     })}
                                                 </TableBody>
-                                            </Table>
+                                            </Table> */}
+                                            <List className={classes.list}>
+                                                {this.state.members.map((member, i) => (
+                                                    <ListItem key={i} role={undefined} dense button>
+                                                        <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
+                                                        <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    </ListItem>
+                                                ))}
+                                            </List>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -315,11 +325,11 @@ class List extends Component {
                                             <Typography gutterBottom variant="h4" align="center" component="h2">
                                                 Members
                                             </Typography>
-                                            <Table className={classes.table}>
+                                            {/* <Table className={classes.table}>
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>Username</TableCell>
-                                                        {/* <TableCell>Email</TableCell> */}
+                                                        <TableCell>Email</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -327,12 +337,22 @@ class List extends Component {
                                                         return (
                                                             <TableRow key={i}>
                                                                 <TableCell>{member.User.username}</TableCell>
-                                                                {/* <TableCell>{member.User.email}</TableCell> */}
+                                                                <TableCell>{member.User.email}</TableCell>
                                                             </TableRow>
                                                         )
                                                     })}
                                                 </TableBody>
-                                            </Table>
+                                            </Table> */}
+                                            <List className={classes.list}>
+                                                {this.state.members.map((member, i) => (
+                                                    <ListItem key={i} role={undefined} dense button>
+                                                        <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
+                                                        {/* <Button onClick={ (e, id) => this.handleDelete(e, item.id) } color="secondary" variant="contained" size="small">
+                                                            <DeleteIcon />
+                                                        </Button> */}
+                                                    </ListItem>
+                                                ))}
+                                            </List>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -386,8 +406,8 @@ class List extends Component {
     }
 }
 
-List.PropTypes = {
+ShowList.PropTypes = {
     classes: PropTypes.object.isRequired
 }
 
-export default withAlert(withStyles(styles)(List));
+export default withAlert(withStyles(styles)(ShowList));

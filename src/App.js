@@ -4,7 +4,7 @@ import './App.css';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
-import List from './components/List';
+import ShowList from './components/ShowList';
 import ButtonAppBar from './components/Navbar';
 import { withAlert } from 'react-alert';
 import Chat from './components/Chat';
@@ -67,7 +67,7 @@ class App extends Component {
           />
           <Route
             path="/lists/:listId"
-            render={(props) => <List {...props} user={this.state.user} />}
+            render={(props) => <ShowList {...props} user={this.state.user} />}
           />
         </Switch>
       </div>
