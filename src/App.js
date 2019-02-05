@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
@@ -7,9 +7,6 @@ import Signin from './components/Signin';
 import ShowList from './components/ShowList';
 import ButtonAppBar from './components/Navbar';
 import { withAlert } from 'react-alert';
-import Chat from './components/Chat';
-import io from 'socket.io-client';
-// import { ConsoleReporter } from 'jasmine';
 
 class App extends Component {
   constructor(props) {

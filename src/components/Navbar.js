@@ -71,7 +71,7 @@ class ButtonAppBar extends Component {
                             <MenuIcon />
                         </IconButton> */}
                         <Typography variant="h6" color="inherit" className={classes.grow}>
-                            Gorcery List
+                            CollabList
                         </Typography>
                         <Button component={ Link } to="/" color="inherit" className={classes.button}>
                             Home
@@ -91,7 +91,7 @@ class ButtonAppBar extends Component {
                             <MenuIcon />
                         </IconButton> */}
                         <Typography variant="h6" color="inherit">
-                            Gorcery List
+                            CollabList
                         </Typography>
                         <Typography variant="h6" color="inherit" className={classes.grow}>
                             {this.props.user.username}

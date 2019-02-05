@@ -87,10 +87,10 @@ class Landing extends Component {
                         <div className={classes.heroUnit}>
                             <div className={classes.heroContent}>
                                 <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                                    Welcome to Grocery List!
+                                    Welcome to CollabList!
                                 </Typography>
                                 <Typography variant="h6" align="center" color="textSecondary">
-                                    An app that allows you to create and modify different types of to-do lists. Collaborate and coordinate with other users using our real-time app to finish tasks from gorcery shopping to daily chores. Sign up today to get started!
+                                    An app that allows you to create and modify different types of to-do lists. Collaborate and coordinate with other users using our real-time app to finish tasks from grocery shopping to daily chores. Sign up today to get started!
                                 </Typography>
                             </div>
                             <div className={classes.heroButtons}>
