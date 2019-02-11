@@ -57,7 +57,11 @@ const styles = theme => ({
         overflow: 'auto'
     },
     buttons: {
-        marginTop: '30px'
+        marginTop: '5px'
+    },
+    adminButtons: {
+        marginTop: '5px',
+        marginBottom: '15px'
     }
 });
 
@@ -90,6 +94,12 @@ class ShowList extends Component {
         this.socket.on('LIST_UPDATED', (data) => {
             if(data.id == this.state.list.id) {
                 this.updateList(data);
+            }
+        })
+
+        this.socket.on('LIST_DELETED', (data) => {
+            if(data.id == this.state.list.id) {
+                this.setRedirect();
             }
         })
     }
@@ -165,7 +175,7 @@ class ShowList extends Component {
         });
     }
 
-    handleDelete = async (e, memberId) => {
+    handleMemberDelete = async (e, memberId) => {
         e.preventDefault();
         if(!this.props.user || this.props.user.id !== this.state.list.userId) {
             await this.props.alert.show('Must be list owner to remove member');
@@ -189,6 +199,30 @@ class ShowList extends Component {
         }
     }
 
+    handleListDelete = async (e) => {
+        e.preventDefault();
+        if(!this.props.user || this.props.user.id !== this.state.list.userId) {
+            await this.props.alert.show('Must be list owner to delete list');
+        } else {
+            const response = await fetch(`/api/lists/${this.state.list.id}/destroy`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                })
+            })
+            const body = await response.json();
+            if (response.status !== 200) throw Error(body.message);
+            if(body.message === 'List was deleted'){
+                this.socket.emit('DELETE_LIST', body);
+            }
+            this.props.alert.show(body.message);
+            this.setRedirect();
+        }
+    }
+
     showList = () => {
         const { classes } = this.props;
 
@@ -202,13 +236,15 @@ class ShowList extends Component {
                                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                                         {this.state.list.name}
                                     </Typography>
-                                    <Grid container spacing={16} justify="center" className={classes.buttons}>
+                                    <Grid container spacing={16} justify="center" className={classes.adminButtons}>
                                         <Grid item>
                                             <UpdateList list={this.state.list} user={this.props.user} />
                                         </Grid>
-                                        {/* <Grid item>
-                                            <MemberModal list={this.state.list} />
-                                        </Grid> */}
+                                        <Grid item>
+                                            <Button onClick={ (e) => this.handleListDelete(e) } color="secondary" variant="contained">
+                                                Delete
+                                            </Button>
+                                        </Grid>
                                     </Grid>
                                     <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
                                     <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
@@ -244,7 +280,7 @@ class ShowList extends Component {
                                                     {this.state.members.map((member, i) => (
                                                         <ListItem key={i} role={undefined} dense button>
                                                             <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
-                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleMemberDelete(e, member.id) }>
                                                                 <DeleteIcon />
                                                             </Button>
                                                         </ListItem>
