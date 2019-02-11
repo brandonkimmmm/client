@@ -14,6 +14,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import classNames from 'classnames';
 import NewItemModal from './NewItemModal';
+import UpdateList from './UpdateList';
 
 const styles = theme => ({
     heroUnit: {
@@ -70,7 +71,7 @@ class ShowList extends Component {
             redirect: false,
         }
 
-        this.socket = io();
+        this.socket = io('http://localhost:5000');
 
         this.socket.open();
 
@@ -85,6 +86,12 @@ class ShowList extends Component {
                 this.removeMember(data.members);
             }
         })
+
+        this.socket.on('LIST_UPDATED', (data) => {
+            if(data.id == this.state.list.id) {
+                this.updateList(data);
+            }
+        })
     }
 
     addMember = data => {
@@ -97,6 +104,12 @@ class ShowList extends Component {
         this.setState({
             members: data
         });
+    }
+
+    updateList = data => {
+        this.setState({
+            list: data
+        })
     }
 
     componentDidMount() {
@@ -189,6 +202,14 @@ class ShowList extends Component {
                                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                                         {this.state.list.name}
                                     </Typography>
+                                    <Grid container spacing={16} justify="center" className={classes.buttons}>
+                                        <Grid item>
+                                            <UpdateList list={this.state.list} user={this.props.user} />
+                                        </Grid>
+                                        {/* <Grid item>
+                                            <MemberModal list={this.state.list} />
+                                        </Grid> */}
+                                    </Grid>
                                     <Typography className="list-subtitle" variant="subheading" align="center">Created By: {this.state.list.User.username}</Typography>
                                     <Typography className="list-subtitle" variant="subheading" align="center">Last Updated At: {Date(this.state.list.updatedAt).substring(0, 15)}</Typography>
                                     <Grid container spacing={16} justify="center" className={classes.buttons}>
@@ -203,7 +224,7 @@ class ShowList extends Component {
                             </div>
                             <div className={classNames(classes.layout, classes.cardGrid)}>
                                 <Grid container spacing={40}>
-                                    <Grid item xs={12} sm={8}>
+                                    <Grid item sm={12} md={8}>
                                         <Card classname={classes.card}>
                                             <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h4" align="center" component="h2">
@@ -213,7 +234,7 @@ class ShowList extends Component {
                                             </CardContent>
                                         </Card>
                                     </Grid>
-                                    <Grid item xs={12} sm={4}>
+                                    <Grid item sm={12} md={4}>
                                         <Card classname={classes.card}>
                                             <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h4" align="center" component="h2">
@@ -255,7 +276,7 @@ class ShowList extends Component {
                             </div>
                             <div className={classNames(classes.layout, classes.cardGrid)}>
                                 <Grid container spacing={40}>
-                                    <Grid item xs={12} sm={8}>
+                                    <Grid item sm={12} md={8}>
                                         <Card classname={classes.card}>
                                             <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h4" align="center" component="h2">
@@ -265,7 +286,7 @@ class ShowList extends Component {
                                             </CardContent>
                                         </Card>
                                     </Grid>
-                                    <Grid item xs={12} sm={4}>
+                                    <Grid item sm={12} md={4}>
                                         <Card classname={classes.card}>
                                             <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h4" align="center" component="h2">
@@ -275,9 +296,9 @@ class ShowList extends Component {
                                                     {this.state.members.map((member, i) => (
                                                         <ListItem key={i} role={undefined} dense button>
                                                             <ListItemText><Typography variant="subtitle1">{member.User.email}</Typography></ListItemText>
-                                                            <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
+                                                            {/* <Button variant="contained" color="secondary" size="small" onClick={ (e, memberId) => this.handleDelete(e, member.id) }>
                                                                 <DeleteIcon />
-                                                            </Button>
+                                                            </Button> */}
                                                         </ListItem>
                                                     ))}
                                                 </List>
@@ -307,7 +328,7 @@ class ShowList extends Component {
                         </div>
                         <div className={classNames(classes.layout, classes.cardGrid)}>
                             <Grid container spacing={40}>
-                                <Grid item xs={12} sm={8}>
+                                <Grid item sm={12} md={8}>
                                     <Card classname={classes.card}>
                                         <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h4" align="center" component="h2">
@@ -317,7 +338,7 @@ class ShowList extends Component {
                                         </CardContent>
                                     </Card>
                                 </Grid>
-                                <Grid item xs={12} sm={4}>
+                                <Grid item sm={12} md={4}>
                                     <Card classname={classes.card}>
                                         <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h4" align="center" component="h2">

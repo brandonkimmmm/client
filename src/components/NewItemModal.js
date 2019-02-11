@@ -45,7 +45,7 @@ class NewItemModal extends React.Component {
             list: undefined
         };
 
-        this.socket = io();
+        this.socket = io('http://localhost:5000');
         this.socket.open();
     }
 
