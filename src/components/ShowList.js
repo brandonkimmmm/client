@@ -75,7 +75,7 @@ class ShowList extends Component {
             redirect: false,
         }
 
-        this.socket = io('http://localhost:5000');
+        this.socket = io();
 
         this.socket.open();
 

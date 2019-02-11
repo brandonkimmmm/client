@@ -61,7 +61,7 @@ class ShowLists extends Component {
             userMemberships: []
         }
 
-        this.socket = io('http://localhost:5000');
+        this.socket = io();
 
         this.socket.open();
 
